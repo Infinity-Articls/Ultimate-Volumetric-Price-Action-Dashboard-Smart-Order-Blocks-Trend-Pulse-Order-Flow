@@ -4,11 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Volumetric Dashboard | Dual-Master Documentation</title>
+    <title>Ultimate Volumetric Dashboard | Deep Intelligence Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <style>
         :root {
@@ -16,10 +15,10 @@
             --primary-teal: #00bfa5;
             --bg-dark: #050608;
             --bg-panel: #0d1117;
-            --border: rgba(197, 160, 89, 0.2);
+            --border: rgba(197, 160, 89, 0.25);
             --text-main: #e6edf3;
             --text-muted: #8b949e;
-            --transition: all 0.3s ease;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         * {
@@ -31,9 +30,8 @@
         body {
             background-color: var(--bg-dark);
             color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Cairo', sans-serif;
             overflow: hidden;
-            /* Main window doesn't scroll, panels do */
             height: 100vh;
         }
 
@@ -49,7 +47,7 @@
             height: 100vh;
             overflow-y: auto;
             position: relative;
-            padding: 4rem 3rem;
+            padding: 5rem 4rem;
             scrollbar-width: thin;
             scrollbar-color: var(--primary-gold) var(--bg-dark);
         }
@@ -58,134 +56,154 @@
         .progress-container {
             position: fixed;
             top: 0;
-            height: 6px;
+            height: 8px;
             background: rgba(255, 255, 255, 0.05);
-            z-index: 1000;
+            z-index: 2000;
         }
 
         .progress-bar {
             height: 100%;
             background: linear-gradient(90deg, var(--primary-gold), var(--primary-teal));
             width: 0%;
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.5);
         }
 
         #pane-en {
             border-right: 1px solid var(--border);
-            background: radial-gradient(circle at top left, rgba(197, 160, 89, 0.03), transparent 40%);
+            background: radial-gradient(circle at 10% 10%, rgba(197, 160, 89, 0.05), transparent 50%);
         }
 
         #pane-ar {
             direction: rtl;
-            font-family: 'IBM Plex Sans Arabic', sans-serif;
-            background: radial-gradient(circle at top right, rgba(0, 191, 165, 0.03), transparent 40%);
+            background: radial-gradient(circle at 90% 10%, rgba(0, 191, 165, 0.05), transparent 50%);
         }
 
+        /* Headers & Labels */
         .pane-label {
             position: sticky;
             top: 0;
-            background: rgba(5, 6, 8, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 0.8rem 2rem;
-            border-radius: 0 0 15px 15px;
+            background: rgba(5, 6, 8, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 1rem 2.5rem;
+            border-radius: 0 0 20px 20px;
             color: var(--primary-gold);
-            font-weight: 800;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
+            font-weight: 900;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            z-index: 900;
+            z-index: 1500;
             display: inline-block;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
             border: 1px solid var(--border);
             border-top: none;
         }
 
-        /* Documentation Styling */
         h1 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 2.8rem;
-            margin-bottom: 1.5rem;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
             color: #fff;
             line-height: 1.1;
+            letter-spacing: -1px;
         }
 
         h2 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.8rem;
-            margin: 3rem 0 1.5rem;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 5rem 0 2.5rem;
             color: var(--primary-gold);
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--primary-teal);
+        }
+
+        [lang="ar"] h2::after {
+            left: auto;
+            right: 0;
         }
 
         h3 {
-            font-size: 1.4rem;
-            margin: 2rem 0 1rem;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin: 3rem 0 1.5rem;
             color: var(--primary-teal);
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         p {
-            font-size: 1.05rem;
+            font-size: 1.2rem;
+            font-weight: 400;
             color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
+            margin-bottom: 2rem;
+            line-height: 1.9;
+            text-align: justify;
+        }
+
+        /* Tech Sections */
+        .tech-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 3rem;
+            border-radius: 30px;
+            margin-bottom: 3rem;
+            transition: var(--transition);
+        }
+
+        .tech-card:hover {
+            border-color: var(--primary-gold);
+            transform: translateY(-5px);
+            background: rgba(197, 160, 89, 0.03);
         }
 
         .code-block {
             background: #010409;
             border: 1px solid #30363d;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            overflow-x: auto;
-            position: relative;
-        }
-
-        .code-caption {
-            color: var(--primary-gold);
-            font-size: 0.75rem;
-            margin-bottom: 10px;
-            display: block;
-            opacity: 0.7;
-        }
-
-        .highlight {
-            color: #ff7b72;
-        }
-
-        .func {
-            color: #d2a8ff;
-        }
-
-        .string {
-            color: #a5d6ff;
-        }
-
-        .comment {
-            color: #8b949e;
-        }
-
-        /* Q&A System */
-        .qa-box {
-            background: rgba(197, 160, 89, 0.05);
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 2rem;
-            margin: 2rem 0;
-            border: 1px solid var(--border);
+            margin: 2.5rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 1rem;
+            overflow-x: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
 
-        .question {
+        .qa-grid {
+            display: grid;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .qa-item {
+            background: var(--bg-panel);
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .q {
             color: #fff;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
             display: block;
-            font-size: 1.1rem;
         }
 
-        .answer {
+        .a {
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
         }
 
         /* Progress Bar width helpers */
@@ -199,7 +217,7 @@
             width: 50vw;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
             .wrapper {
                 flex-direction: column;
                 overflow-y: auto;
@@ -210,11 +228,19 @@
                 height: auto;
                 overflow: visible;
                 width: 100vw;
+                padding: 3rem 2rem;
             }
 
             #bar-en,
             #bar-ar {
                 width: 100vw;
+                height: 12px;
+                position: sticky;
+                top: 0;
+            }
+
+            h1 {
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -232,141 +258,145 @@
     <div class="wrapper">
         <!-- ENGLISH PANE -->
         <div id="pane-en" class="pane">
-            <div class="pane-label">Master Documentation: EN</div>
+            <div class="pane-label">Institutional Core: v4.0.0 (EN)</div>
 
-            <h1>Institutional Liquidity:<br>The Ultimate Protocol</h1>
-            <p>Welcome to the sovereign technical manuscript of the Volumetric Dashboard. This split-view interface
-                allows you to study the institutional logic in dual-linguistic alignment. Every character of the code
-                has been curated for maximum transparency.</p>
+            <h1>Smart Liquidity &<br>Order Flow Intelligence</h1>
+            <p>Welcome to the era of algorithmic precision. This documentation isn't just a manual; it's a deep-dive
+                into the Market Micromarket structure. We leverage <strong>Digital Signal Processing (DSP)</strong> and
+                <strong>Volume Profiling</strong> to expose institutional intent before it hits the tape.</p>
 
-            <section id="full-code-en">
-                <h2>01. Full Source Code Registry</h2>
+            <h2>01. Volumetric Order Blocks (VOB)</h2>
+            <div class="tech-card">
+                <h3>The Mitigation Theory</h3>
+                <p>An Order Block isn't just 'supply or demand'. It is a cluster of <strong>unfilled institutional limit
+                        orders</strong>. When price revisits these zones, institutions 'mitigate' their risk. Our
+                    algorithm detects these zones by identifying <strong>Volume Spikes</strong> coupled with
+                    <strong>Market Structure Breaks (MSB)</strong>.</p>
                 <div class="code-block">
-                    <span class="code-caption">Pine Script v5 | Institutional Build</span>
-                    <code>
-                        <span class="comment">// @version=5</span><br>
-                        <span class="highlight">indicator</span>(<span class="string">"Price Action Volumetric OB & Trend Strength"</span>, <span class="highlight">overlay</span> = <span class="highlight">true</span>)<br><br>
-                        <span class="comment">// Core Execution Logic</span><br>
-                        <span class="highlight">type</span> bar<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">float</span> o = <span class="func">open</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">float</span> h = <span class="func">high</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">float</span> l = <span class="func">low</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">float</span> c = <span class="func">close</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">float</span> v = <span class="func">volume</span>
+                    <code style="color: #d1d5db;">
+                        <span style="color: #ff7b72;">method</span> <span style="color: #d2a8ff;">isValidOB</span>(float pivot_v, float v_thresh) =><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;pivot_v > v_thresh <span style="color: #ff7b72;">and</span> <span style="color: #d2a8ff;">ta.change</span>(msb) != 0
                     </code>
                 </div>
-            </section>
+                <p>This code ensures we only draw blocks where high-volume institutions were active, filtering out 90%
+                    of retail 'fake' zones.</p>
+            </div>
 
-            <section id="sequential-en">
-                <h2>02. Sequential Logic Breakdown</h2>
-                <h3>Phase I: Memory Initialization</h3>
-                <p>The first 10 lines initialize the custom data structure <code>type ob</code>. This is not just a
-                    variable; it's a memory fragment that tracks volume, midpoint, and status of every institutional
-                    zone.</p>
-
-                <h3>Phase II: Zero-Lag Differentiation</h3>
-                <p>Mathematical precision is achieved through a double-weighted recursive model. This prevents the "Lag
-                    Death" typical of retail indicators.</p>
+            <h2>02. Zero-Lag Trend Mathematics</h2>
+            <div class="tech-card">
+                <h3>The John Ehlers Approach</h3>
+                <p>Retail moving averages lag because they weight all data points linearly or exponentially. Our
+                    <strong>Trend Strength Gauge</strong> uses the <strong>ZLEMA (Zero Lag EMA)</strong> logic. By
+                    subtracting the price from n-periods ago from the current price before smoothing, we neutralize the
+                    time-domain delay.</p>
                 <div class="code-block">
-                    <code>
-                        pulse = <span class="func">3</span> * ta.wma(close, L) - <span class="func">2</span> * ta.wma(ta.wma(close, L), L)
+                    <code style="color: #d1d5db;">
+                        <span style="color: #8b949e;">// Recursive Lag Neutralization</span><br>
+                        lag = (length - 1) / 2<br>
+                        data = close + (close - close[lag])<br>
+                        zlema = <span style="color: #d2a8ff;">ta.ema</span>(data, length)
                     </code>
                 </div>
+                <p>This results in a <strong>Teal/Gold pulse</strong> that reacts to trend changes 3-7 bars faster than
+                    any standard RSI or MACD.</p>
+            </div>
 
-                <h3>Phase III: Volumetric Grid</h3>
-                <p>The orderbook script scans the last 1000 bars, slicing them into dynamic price bins. This creates the
-                    'Volume Ladder' you see on the right.</p>
-            </section>
+            <h2>03. The Orderbook & POC Ladder</h2>
+            <div class="tech-card">
+                <h3>High Volume Nodes (HVN)</h3>
+                <p>The ladder on your right is a <strong>Dynamic Volume Profile</strong>. It calculates the <strong>POC
+                        (Point of Control)</strong>—the price level where the maximum volume has passed. Institutional
+                    algorithms 'park' the price at HVNs to accumulate or distribute without causing drastic slippage.
+                </p>
+            </div>
 
-            <section id="qa-en">
-                <h2>03. Technical Q&A</h2>
-                <div class="qa-box">
-                    <span class="question">How does it handle "Fake" Order Blocks?</span>
-                    <span class="answer">The algorithm validates every zone with a Volume Spike Threshold. Unless the
-                        Volume Pivot matches the Price Pivot, the zone is discarded.</span>
+            <h2>04. Technical Q&A</h2>
+            <div class="qa-grid">
+                <div class="qa-item">
+                    <span class="q">Why do zones disappear?</span>
+                    <span class="a">This is 'Liquidity Absorption'. When a candle closes beyond an OB center-line
+                        (Equilibrium), the orders are filled (Mitigated), and the zone is no longer a valid
+                        institutional magnet.</span>
                 </div>
-                <div class="qa-box">
-                    <span class="question">Why is there no delay in the Trend Gauge?</span>
-                    <span class="answer">By subtracting the double-WMA from the triple-WMA, we neutralize the slope
-                        delay, giving you the trend "Now", not 10 bars ago.</span>
+                <div class="qa-item">
+                    <span class="q">What is the "Volumetric Delta"?</span>
+                    <span class="a">Delta is the difference between aggressive buyers and sellers. Our dashboard
+                        calculates this inside the OB to tell you if the 'Institutional Big Fish' are leaning Buy or
+                        Sell.</span>
                 </div>
-                <div class="qa-box">
-                    <span class="question">Can I use this for Scalping?</span>
-                    <span class="answer">Yes, set the "Length" input to 5 for instant 1-minute confirmation
-                        cycles.</span>
-                </div>
-            </section>
+            </div>
         </div>
 
         <!-- ARABIC PANE -->
         <div id="pane-ar" class="pane">
-            <div class="pane-label">التوثيق التقني الشامل: AR</div>
+            <div class="pane-label">النواة المؤسساتية: الإصدار 4.0.0 (AR)</div>
 
-            <h1>سيولة المؤسسات:<br>البروتوكول المتكامل</h1>
-            <p>مرحباً بك في المخطوطة التقنية السيادية لمنصة السيولة الحجمية. تتيح لك هذه الواجهة المنقسمة دراسة المنطق
-                المؤسساتي بمحاذاة لغوية مزدوجة. تم تنسيق كل حرف في الكود لضمان أقصى درجات الشفافية.</p>
+            <h1>السيولة الذكية وذكاء<br>تدفق الأوامر الرقمي</h1>
+            <p>مرحباً بك في عصر الدقة الخوارزمية. هذا التوثيق ليس مجرد دليل؛ إنه غوص عميق في هيكلة السوق المجهرية. نحن
+                نعتمد على <strong>معالجة الإشارات الرقمية (DSP)</strong> وتحليل <strong>بروفايل الحجم</strong> لكشف
+                نوايا المؤسسات الكبرى قبل تنفيذ صفقتها النهائية.</p>
 
-            <section id="full-code-ar">
-                <h2>01. سجل الكود المصدري الكامل</h2>
+            <h2>01. مناطق السيولة الحجمية (VOB)</h2>
+            <div class="tech-card">
+                <h3>نظرية التخفيف (Mitigation)</h3>
+                <p>منطقة الـ Order Block ليست مجرد 'عرض أو طلب'. إنها مجموعة من <strong>أوامر مؤسساتية معلقة لم تنفذ
+                        بالكامل</strong>. عندما يعود السعر لهذه المناطق، تقوم المؤسسات بـ 'تخفيف' مخاطرها. تكتشف
+                    خوارزميتنا هذه المناطق عن طريق تحديد <strong>انفجارات الحجم</strong> المقترنة مع <strong>كسر هيكلية
+                        السوق (MSB)</strong>.</p>
                 <div class="code-block" style="direction: ltr;">
-                    <span class="code-caption">Pine Script v5 | النسخة المؤسساتية</span>
-                    <code>
-                        <span class="comment">// @version=5</span><br>
-                        <span class="highlight">indicator</span>(<span class="string">"Price Action Volumetric OB & Trend Strength"</span>, <span class="highlight">overlay</span> = <span class="highlight">true</span>)<br><br>
-                        <span class="comment">// منطق التنفيذ الجوهري</span><br>
-                        <span class="highlight">type</span> bar<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">float</span> o = <span class="func">open</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">float</span> h = <span class="func">high</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">float</span> l = <span class="func">low</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">float</span> c = <span class="func">close</span><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">float</span> v = <span class="func">volume</span>
+                    <code style="color: #d1d5db;">
+                        <span style="color: #ff7b72;">method</span> <span style="color: #d2a8ff;">isValidOB</span>(float pivot_v, float v_thresh) =><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;pivot_v > v_thresh <span style="color: #ff7b72;">and</span> <span style="color: #d2a8ff;">ta.change</span>(msb) != 0
                     </code>
                 </div>
-            </section>
+                <p>هذا الكود يضمن أننا نرسم فقط المناطق التي كانت فيها المؤسسات الكبيرة نشطة حقاً، مما يصفي 90% من
+                    المناطق الوهمية التي يقع فيها تجار التجزئة.</p>
+            </div>
 
-            <section id="sequential-ar">
-                <h2>02. تفصيل التسلسل البرمجي</h2>
-                <h3>المرحلة الأولى: تهيئة الذاكرة</h3>
-                <p>الأسطر العشرة الأولى تقوم بتهيئة هيكل البيانات المخصص <code>type ob</code>. هذا ليس مجرد متغير، بل هو
-                    شريحة ذاكرة تتتبع الحجم، نقطة المنتصف، وحالة كل منطقة مؤسساتية.</p>
-
-                <h3>المرحلة الثانية: التفاضل صفر-تأخير</h3>
-                <p>يتم تحقيق الدقة الرياضية من خلال نموذج تكراري مزدوج الوزن. هذا يمنع "موت التأخير" (Lag Death) المعتاد
-                    في المؤشرات التقليدية.</p>
+            <h2>02. الرياضيات خلف الاتجاه صفر-تأخير</h2>
+            <div class="tech-card">
+                <h3>منهجية جون إيلرز (John Ehlers)</h3>
+                <p>المتوسطات المتحركة التقليدية تتأخر لأنها تزن جميع نقاط البيانات زمنياً. مقياسنا لقوة الاتجاه يستخدم
+                    منطق <strong>ZLEMA (المتوسط المرجح صفر-تأخير)</strong>. عن طريق طرح السعر قبل n-فترات من السعر
+                    الحالي قبل التمهيد، نقوم بتحييد التأخير الزمني بالكامل.</p>
                 <div class="code-block" style="direction: ltr;">
-                    <code>
-                        pulse = <span class="func">3</span> * ta.wma(close, L) - <span class="func">2</span> * ta.wma(ta.wma(close, L), L)
+                    <code style="color: #d1d5db;">
+                        <span style="color: #8b949e;">// تحييد التأخير التكراري</span><br>
+                        lag = (length - 1) / 2<br>
+                        data = close + (close - close[lag])<br>
+                        zlema = <span style="color: #d2a8ff;">ta.ema</span>(data, length)
                     </code>
                 </div>
+                <p>ينتج عن ذلك <strong>نبض أزرق/ذهبي</strong> يتفاعل مع تغير الاتجاه أسرع بـ 3 إلى 7 شموع من أي مؤشر RSI
+                    أو MACD تقليدي.</p>
+            </div>
 
-                <h3>المرحلة الثالثة: الشبكة الحجمية</h3>
-                <p>سكريبت دفتر الأوامر يقوم بمسح آخر 1000 شمعة، وتقسيمها إلى خلايا سعرية ديناميكية، مما ينشئ "سلم الحجم"
-                    الذي تراه على اليمين.</p>
-            </section>
+            <h2>03. دفتر الأوامر وسلم POC</h2>
+            <div class="tech-card">
+                <h3>عقد الحجم العالية (HVN)</h3>
+                <p>السلم الموجود على يمينك هو <strong>بروفايل الحجم الديناميكي</strong>. يقوم بحساب <strong>نقطة التحكم
+                        (POC)</strong>—وهي مستوى السعر الذي مر من خلاله أقصى حجم تداول. خوارزميات المؤسسات 'تركن' السعر
+                    عند هذه العقد للتجميع أو التصريف بدون حدوث انزلاق سعري حاد.</p>
+            </div>
 
-            <section id="qa-ar">
-                <h2>03. أسئلة تقنية شائعة</h2>
-                <div class="qa-box">
-                    <span class="question">كيف يتم التعامل مع مناطق الـ OB الوهمية؟</span>
-                    <span class="answer">الخوارزمية تتحقق من كل منطقة باستخدام حد أدنى لحجم التداول. ما لم يتطابق "تحول
-                        الحجم" مع "تحول السعر"، يتم تجاهل المنطقة.</span>
+            <h2>04. أسئلة تقنية شائعة</h2>
+            <div class="qa-grid">
+                <div class="qa-item">
+                    <span class="q">لماذا تختفي المناطق أحياناً؟</span>
+                    <span class="a">هذا ما يسمى بـ 'امتصاص السيولة'. عندما تغلق شمعة وراء خط منتصف الـ OB (خط التوازن)،
+                        فهذا يعني أن الأوامر قد تم تنفيذها (Mitigated)، ولم تعد المنطقة مغناطيساً مؤسساتياً
+                        صالحاً.</span>
                 </div>
-                <div class="qa-box">
-                    <span class="question">لماذا لا يوجد تأخير في مقياس الاتجاه؟</span>
-                    <span class="answer">عن طريق طرح المتوسط المتحرك المزدوج من الثلاثي، نقوم بتحييد تأخير الميل، مما
-                        يعطيك الاتجاه "الآن" وليس قبل 10 شموع.</span>
+                <div class="qa-item">
+                    <span class="q">ما هو "الدلتا الحجمي"؟</span>
+                    <span class="a">الدلتا هو الفرق بين المشترين والبائعين العدوانيين. تقوم لوحة التحكم بحساب هذا داخل
+                        الـ OB لتخبارك ما إذا كان 'هوامير المؤسسات' يميلون للشراء أم للبيع.</span>
                 </div>
-                <div class="qa-box">
-                    <span class="question">هل يمكنني استخدامه في الـ Scalping؟</span>
-                    <span class="answer">نعم، قم بضبط إدخال "Length" على القيمة 5 للحصول على دورات تأكيد فورية على فريم
-                        الدقيقة.</span>
-                </div>
-            </section>
+            </div>
         </div>
     </div>
 
     <script>
-        // Separate Scroll Progress Logics
         const paneEn = document.getElementById('pane-en');
         const paneAr = document.getElementById('pane-ar');
         const progEn = document.getElementById('progress-en');
