@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Volumetric Price Action Dashboard | Infinity Algo Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@300;400;600;800&family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #c5a059;
+            --primary-teal: #00bfa5;
+            --bg-dark: #0a0e14;
+            --card-bg: rgba(26, 32, 44, 0.7);
+            --text-white: #ffffff;
+            --text-gray: #a0aec0;
+            --border-color: rgba(197, 160, 89, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [lang="ar"] {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Background */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 20%, rgba(197, 160, 89, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 80%, rgba(0, 191, 165, 0.05) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        header {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(10, 14, 20, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--primary-gold), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .lang-switch {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lang-switch:hover {
+            background: var(--primary-gold);
+            color: var(--bg-dark);
+            transform: translateY(-2px);
+        }
+
+        main {
+            padding: 100px 5% 50px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .hero-banner {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero-banner img {
+            width: 100%;
+            display: block;
+        }
+
+        .content-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .content-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-gold);
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1.5rem;
+            color: var(--primary-teal);
+            border-bottom: 1px solid rgba(0, 191, 165, 0.2);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem;
+            color: #fff;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        .code-block {
+            background: #011627;
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--primary-gold);
+            overflow-x: auto;
+            color: #d6deeb;
+        }
+
+        .list-items {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .list-items li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-gray);
+        }
+
+        .list-items li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary-gold);
+        }
+
+        [lang="ar"] .list-items li {
+            padding-left: 0;
+            padding-right: 1.5rem;
+        }
+
+        [lang="ar"] .list-items li::before {
+            left: auto;
+            right: 0;
+            content: '←';
+        }
+
+        .cta-container {
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary-gold), #e2b76e);
+            color: #000;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            box-shadow: 0 10px 20px rgba(197,160,89, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(197,160,89, 0.5);
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 5%;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-gray);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .hidden { display: none; }
+
+        /* RTL Adjustments */
+        [lang="ar"] {
+            direction: rtl;
+            text-align: right;
+        }
+
+        [lang="ar"] h1, [lang="ar"] h2, [lang="ar"] h3 {
+            letter-spacing: 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .content-card { padding: 1.5rem; }
+            main { padding-top: 80px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+
+    <header>
+        <div class="logo">Infinity Algo</div>
+        <button class="lang-switch" onclick="toggleLanguage()">
+            <span id="lang-text">العربية</span>
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 11.37 9.188 16.503 6 20"></path></svg>
+        </button>
+    </header>
+
+    <main>
+        <div class="hero-banner">
+            <img src="banner.png" alt="Indicator Banner">
+        </div>
+
+        <!-- English Content -->
+        <article id="content-en" class="content-card visible">
+            <h1>Comprehensive Guide: Volumetric Price Action & Trend Strength</h1>
+            <p>This indicator stands as one of the most powerful tools programmed in <strong>Pine Script v5</strong>. It seamlessly integrates <strong>Order Blocks (OB)</strong>, <strong>Price Action analysis</strong>, and <strong>Trend Strength</strong>.</p>
+            
+            <h2>Part 1: Key Components</h2>
+            <ul class="list-items">
+                <li><strong>Volumetric Order Blocks:</strong> Identifies supply and demand zones with internal buy/sell metrics.</li>
+                <li><strong>Trend Strength Gauge:</strong> Zero-lag momentum tracking using advanced WMA/SMA differential logic.</li>
+                <li><strong>Volume Orderbook:</strong> Visual representation of volume distribution (POC) at current price levels.</li>
+            </ul>
+
+            <h2>Part 2: Technical Deep Dive</h2>
+            <h3>1. Setup and Inputs</h3>
+            <div class="code-block">
+                //@version=5<br>
+                indicator("Price Action Volumetric OB & Trend Strength", overlay = true)
+            </div>
+            
+            <h3>2. Custom Data Structures</h3>
+            <p>Using types like <code>type bar</code> and <code>type ob</code> ensures the code is scalable and professional.</p>
+
+            <h3>3. Momentum Equation</h3>
+            <p>The logic uses a zero-lag differential: <code>3 * ta.wma(close, L) - 2 * ta.sma(close, L)</code> to capture shifts instantly.</p>
+
+            <h2>Part 3: Trading Strategy</h2>
+            <ul class="list-items">
+                <li><strong>OB Zones:</strong> Wait for price to enter a "Volumetric Box". Darker zones indicate higher institutional concentration.</li>
+                <li><strong>Trend Pulse:</strong> Only enter long when the gauge is in the Teal zone, ensuring you have the "Wind in your sails".</li>
+                <li><strong>Targets:</strong> Use the Dynamic Orderbook POC levels as high-probability exit points.</li>
+            </ul>
+
+            <div class="cta-container">
+                <a href="https://infinityalgoacademy.net/item/ultimate-volumetric-price-action-dashboard-smart-order-blocks-trend-pulse-order-flow/" class="cta-button">Access Full Indicator v4.0</a>
+            </div>
+        </article>
+
+        <!-- Arabic Content -->
+        <article id="content-ar" class="content-card hidden" lang="ar">
+            <h1>الدليل الشامل: مؤشر السيولة السعرية وقوة الاتجاه</h1>
+            <p>يعتبر هذا المؤشر واحداً من أقوى الأدوات المبرمجة بلغة <strong>Pine Script v5</strong> على منصة TradingView. يدمج ببراعة بين <strong>مناطق السيولة (OB)</strong>، <strong>تحليل الـ Price Action</strong>، و <strong>قوة الزخم</strong>.</p>
+            
+            <h2>الجزء الأول: المكونات الرئيسية</h2>
+            <ul class="list-items">
+                <li><strong>مناطق السيولة الحجمية:</strong> تحديد مناطق الطلب والعرض بدقة مع عرض نسب الشراء والبيع داخل كل منطقة.</li>
+                <li><strong>مقياس قوة الاتجاه:</strong> تتبع الزخم بدون تأخير (Zero-Lag) باستخدام منطق رياضي متقدم يعتمد على المتوسطات المرجحة.</li>
+                <li><strong>دفتر السيولة المتطور:</strong> تمثيل مرئي لتوزيع الأحجام (POC) عند مستويات السعر الحالية لتحديد الأهداف.</li>
+            </ul>
+
+            <h2>الجزء الثاني: التحليل البرمجي</h2>
+            <h3>1. الإعدادات والمدخلات</h3>
+            <div class="code-block">
+                //@version=5<br>
+                indicator("Price Action Volumetric OB & Trend Strength", overlay = true)
+            </div>
+            
+            <h3>2. هياكل البيانات المخصصة</h3>
+            <p>استخدام الـ <code>types</code> المتعددة يضمن كوداً سريعاً ومنظماً يحاكي الأنظمة المؤسساتية.</p>
+
+            <h3>3. معادلة الزخم الذهبية</h3>
+            <p>يعتمد الحساب على الفرق بين <code>3 * WMA - 2 * SMA</code> لخلق معادلة زخم تستجيب للسعر فوراً دون تأخير المربعات الكلاسيكية.</p>
+
+            <h2>الجزء الثالث: كيف تتداول باحتراف؟</h2>
+            <ul class="list-items">
+                <li><strong>مناطق الـ OB:</strong> انتظر وصول السعر للمنطقة المرسومة وتأكد من تزايد سيولة الشراء/البيع داخل المربع.</li>
+                <li><strong>مقياس القوة:</strong> لا تدخل صفقات عكس الاتجاه إذا كان المقياس يظهر لوناً قوياً (تيل للصعود، أبيض/أحمر للهبوط).</li>
+                <li><strong>تحديد الأهداف:</strong> استخدم مستويات الـ POC في الـ Orderbook كأهداف ربحية ذات احتمالية نجاح عالية.</li>
+            </ul>
+
+            <div class="cta-container">
+                <a href="https://infinityalgoacademy.net/item/ultimate-volumetric-price-action-dashboard-smart-order-blocks-trend-pulse-order-flow/" class="cta-button">احصل على الإصدار الرابع الآن</a>
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Infinity Algo Academy. All rights reserved.</p>
+        <p>Expert Tools for Precision Trading.</p>
+    </footer>
+
+    <script>
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            const enContent = document.getElementById('content-en');
+            const arContent = document.getElementById('content-ar');
+            const langText = document.getElementById('lang-text');
+            const main = document.querySelector('main');
+
+            if (currentLang === 'en') {
+                enContent.classList.add('hidden');
+                enContent.classList.remove('visible');
+                arContent.classList.remove('hidden');
+                setTimeout(() => arContent.classList.add('visible'), 50);
+                langText.innerText = 'English';
+                document.body.setAttribute('lang', 'ar');
+                currentLang = 'ar';
+            } else {
+                arContent.classList.add('hidden');
+                arContent.classList.remove('visible');
+                enContent.classList.remove('hidden');
+                setTimeout(() => enContent.classList.add('visible'), 50);
+                langText.innerText = 'العربية';
+                document.body.setAttribute('lang', 'en');
+                currentLang = 'en';
+            }
+        }
+
+        // Initialize scroll animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.content-card');
+            cards.forEach(card => card.classList.add('visible'));
+        });
+    </script>
+</body>
+</html>
