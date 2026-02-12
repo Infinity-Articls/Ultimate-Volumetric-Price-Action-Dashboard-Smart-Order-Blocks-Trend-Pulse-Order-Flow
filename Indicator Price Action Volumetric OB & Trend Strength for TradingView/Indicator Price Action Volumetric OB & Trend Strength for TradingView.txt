@@ -1,0 +1,551 @@
+// This Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// Join our channel for more free tools: https://t.me/simpleforextools
+
+//@version=5
+indicator("Price Action Volumetric OB & Trend Strength","Price Action Volumetric OB & Trend Strength", overlay = true, max_bars_back = 5000, max_boxes_count = 500, max_labels_count = 500, max_lines_count = 500)
+
+
+// ################## Price Action Volumetric Order Blocks ##################
+
+
+const color colup = #089981
+const color coldn = #f23645
+
+const string tm = "[Length] Use Length to adjust cordinate of the orderblocks\n[Full] Use whole candle body"
+const string tn = "Mitigation method for when to trigger order blocks"
+const string tj = "Order block Metrics text size" 
+const string ta = 'Display internal buy & sell activity'
+const string ts = 'Show Last number of orderblocks'
+const string gv = "Volumetric Order Blocks"
+
+obshow         = input.bool  (true                , "Show Last"                      ,                ts,          '1',         gv)
+oblast         = input.int   (5                   , ""                               ,  0,                   50,                 1 ,     inline = '1', group = gv)
+obmaxsz        = input.int   (200                 , "Макс. кол-во OB"                , 50,                  500,                 1 ,     inline = '1', group = gv)
+obupcs         = input.color (color.new(colup, 90), ""                               ,                                            inline = '1', group = gv)
+obdncs         = input.color (color.new(coldn, 90), ""                               ,                                            inline = '1', group = gv)
+obshowactivity = input.bool  (true                , "Show Buy/Sell Activity         ",                ta,          '2',         gv)
+obactup        = input.color (color.new(colup, 50), ""                               ,                                            inline = '2', group = gv)
+obactdn        = input.color (color.new(coldn, 50), ""                               ,                                            inline = '2', group = gv)
+obmode         = input.string("Length"            , "Construction "                  , ["Length",                           "Full"], tm,          '3',         gv)
+len            = input.int   (5                   , ""                               ,  1,                  20,                  1 ,     inline = '3', group = gv)
+obmiti         = input.string("Close"             , "Mitigation Method"              , ["Close",           "Wick",           "Avg"], tn,               group = gv)
+obtxt          = input.string("Normal"            , "Metric Size"                    , ["Tiny", "Small", "Normal", "Large", "Huge"], tj,               group = gv)
+showmetric     = input.bool  (true                , "Show Metrics"                   ,                                                                 group = gv)
+showline       = input.bool  (true                , "Show Mid-Line"                  ,                                                                 group = gv)
+overlap        = input.bool  (true                , "Hide Overlap"                   ,                                                                 group = gv, tooltip = "Most recent order block will be preserved")
+
+blcreated     = input.bool(false                  , "Bullish OB Formed      "        , inline = "Formed"                              , group = "ANY ALERT")
+brcreated     = input.bool(false                  , "Bearish OB Formed"              , inline = "Formed"                              , group = "ANY ALERT")
+blmitigated   = input.bool(false                  , "Bullish OB Mitigated   "        , inline = "Mitigated"                           , group = "ANY ALERT")
+brmitigated   = input.bool(false                  , "Bearish OB Mitigated"           , inline = "Mitigated"                           , group = "ANY ALERT")
+blinside      = input.bool(false                  , "Price Inside Bullish OB"        , inline = "Inside"                              , group = "ANY ALERT")
+brinside      = input.bool(false                  , "Price Inside Bearish OB"        , inline = "Inside"                              , group = "ANY ALERT")
+
+type bar
+    float o = open
+    float h = high
+    float l = low
+    float c = close
+    float v = volume
+    int   i = bar_index
+    int   t = time
+
+type ob
+    float top
+    float btm
+    float avg
+    int   loc
+    color css
+    float vol
+    int   dir
+    int   move
+    int   blPOS
+    int   brPOS
+    int   xlocbl
+    int   xlocbr
+
+type alert
+    bool created   = false
+    bool inside    = false
+    bool mitigated = false
+
+type cross
+    bool reset = false
+
+bar          b = bar.new()
+alert     blal = alert.new()
+alert     bral = alert.new()
+
+var cross blIS = cross.new()
+var cross brIS = cross.new()
+
+method txSz(string s) =>
+    out = switch s
+        "Tiny"   => size.tiny
+        "Small"  => size.small
+        "Normal" => size.normal
+        "Large"  => size.large
+        "Huge"   => size.huge
+    out
+
+method display(ob id, ob[] full, int i) =>
+
+    box.new    (top = id.top, bottom = id.btm, left = id.loc, right = b.t      , border_color = na, bgcolor = id.css, xloc = xloc.bar_time)
+    box.new    (top = id.top, bottom = id.btm, left = b.t   , right = b.t + 1  , border_color = na, bgcolor = id.css, xloc = xloc.bar_time, extend = extend.right)
+
+    if obshowactivity
+        box.new(top = id.top, bottom = id.avg, left = id.loc, right = id.xlocbl, border_color = na, bgcolor = obactup, xloc = xloc.bar_time)
+        box.new(top = id.avg, bottom = id.btm, left = id.loc, right = id.xlocbr, border_color = na, bgcolor = obactdn, xloc = xloc.bar_time)
+
+    if showline
+        line.new(
+               x1 = id.loc
+             , x2 = b.t
+             , y1 = id.avg
+             , y2 = id.avg
+             , color = color.new(id.css, 0)
+             , xloc = xloc.bar_time
+             , style = line.style_dashed
+             )
+
+    if showmetric and i == math.min(oblast - 1, full.size() - 1)
+        float   tV = 0.0
+        float[] dV = array.new<float>()
+
+        seq = math.min(oblast - 1, full.size() - 1)
+        if seq >= 0
+            for j = 0 to seq
+                if j < full.size()
+                    cV = full.get(j)
+                    tV += cV.vol
+
+            if tV > 0
+                for y = 0 to seq
+                    if y < full.size()
+                        dV.push(math.floor((full.get(y).vol / tV) * 100))
+
+                        current_ob = full.get(y)
+                        label.new(
+                               b.i + 1
+                             , current_ob.avg
+                             , textcolor = color.new(current_ob.css, 0)
+                             , style = label.style_label_left
+                             , size = obtxt.txSz()
+                             , color = #ffffff00
+                             , text = str.tostring(math.round(full.get(y).vol, 3), format = format.volume) + " (" + str.tostring(dV.get(y)) + "%)"
+                             )
+
+method overlap(ob[] id) =>
+    if id.size() > 1
+        for i = id.size() - 1 to 1
+            if i < id.size()
+                stuff   = id.get(i)
+                current = id.get(0)
+                switch
+                    stuff.btm > current.btm and stuff.btm < current.top => id.remove(i)
+                    stuff.top < current.top and stuff.btm > current.btm => id.remove(i)
+                    stuff.top > current.top and stuff.btm < current.btm => id.remove(i)
+                    stuff.top < current.top and stuff.top > current.btm => id.remove(i)
+
+method umt(ob metric) =>
+    switch metric.dir
+        1 =>
+            switch metric.move
+                1 => metric.blPOS := metric.blPOS + 1, metric.move := 2
+                2 => metric.blPOS := metric.blPOS + 1, metric.move := 3
+                3 => metric.brPOS := metric.brPOS + 1, metric.move := 1
+        -1 =>
+            switch metric.move
+                1 => metric.brPOS := metric.brPOS + 1, metric.move := 2
+                2 => metric.brPOS := metric.brPOS + 1, metric.move := 3
+                3 => metric.blPOS := metric.blPOS + 1, metric.move := 1
+
+    if bar_index >= 2 and (b.t - b.t[1]) == (b.t[1] - b.t[2])
+        metric.xlocbl := metric.loc + (b.t - b.t[1]) * metric.blPOS
+        metric.xlocbr := metric.loc + (b.t - b.t[1]) * metric.brPOS
+
+fnOB() =>
+    var ob[] blob = array.new<ob>()
+    var ob[] brob = array.new<ob>()
+    var int dir = 0
+
+    up = ta.highest  (     len     )
+    dn = ta.lowest   (     len     )
+    pv = ta.pivothigh(b.v, len, len)
+
+    dir := b.h[len] > up ? -1 : b.l[len] < dn ? 1 : nz(dir[1], 0)
+
+    atr = ta.atr(len)
+
+    btmP =  obmode == "Length" ? (b.h[len] - 1 * atr[len]) < b.l[len] ? b.l[len] : (b.h[len] - 1 * atr[len]) : b.l[len]
+    topP =  obmode == "Length" ? (b.l[len] + 1 * atr[len]) > b.h[len] ? b.h[len] : (b.l[len] + 1 * atr[len]) : b.h[len]
+
+    if pv and dir == 1 and blob.size() < obmaxsz
+        new_ob = ob.new(topP, b.l[len], math.avg(topP, b.l[len]), b.t[len], obupcs, b.v[len], b.c[len] > b.o[len] ? 1 : -1, 1, 0, 0, b.t[len], b.t[len])
+        blob.unshift(new_ob)
+        if blob.size() > obmaxsz
+            blob.pop()
+        blal.created := true
+        blIS.reset   := false
+
+    if pv and dir == -1 and brob.size() < obmaxsz
+        new_ob = ob.new(b.h[len], btmP, math.avg(btmP, b.h[len]), b.t[len], obdncs, b.v[len], b.c[len] > b.o[len] ? 1 : -1, 1, 0, 0, b.t[len], b.t[len])
+        brob.unshift(new_ob)
+        if brob.size() > obmaxsz
+            brob.pop()
+        bral.created := true
+        brIS.reset   := false
+
+    if blob.size() > 0 and barstate.isconfirmed
+        new_blob = array.new<ob>()
+        for [i, ob_elem] in blob
+            mitigated = false
+            for j = 0 to len - 1
+                if obmiti == "Close" ? math.min(b.c[j], b.o[j]) < ob_elem.btm : obmiti == "Wick" ? b.l < ob_elem.btm : obmiti == "Avg" ? b.l < ob_elem.avg : na
+                    mitigated := true
+                    blal.mitigated := true
+                    break
+            if not mitigated
+                new_blob.push(ob_elem)
+        blob := new_blob
+
+    if brob.size() > 0 and barstate.isconfirmed
+        new_brob = array.new<ob>()
+        for [i, ob_elem] in brob
+            mitigated = false
+            for j = 0 to len - 1
+                if obmiti == "Close" ? math.max(b.c[j], b.o[j]) > ob_elem.top : obmiti == "Wick" ? b.h > ob_elem.top : obmiti == "Avg" ? b.h > ob_elem.avg : na
+                    mitigated := true
+                    bral.mitigated := true
+                    break
+            if not mitigated
+                new_brob.push(ob_elem)
+        brob := new_brob
+
+    if blob.size() > 0
+        for [i, metric] in blob
+            metric.umt()
+
+    if brob.size() > 0
+        for [i, metric] in brob
+            metric.umt()
+
+    if overlap
+        blob.overlap()
+        brob.overlap()
+
+    if barstate.isconfirmed
+        if blob.size() > 0
+            ob = blob.get(0)
+            if low  < ob.top and blIS.reset == false
+                blal.inside := true
+                blIS.reset  := true
+
+        if brob.size() > 0
+            ob = brob.get(0)
+            if high > ob.btm and brIS.reset == false
+                bral.inside := true
+                brIS.reset  := true
+
+    if barstate.islast
+        for bx in box.all
+            bx.delete()
+        for ln in line.all
+            ln.delete()
+        for lb in label.all
+            lb.delete()
+        
+        if blob.size() > 0
+            display_count = math.min(oblast, blob.size())
+            for i = 0 to display_count - 1
+                blob.get(i).display(blob, i)
+
+        if brob.size() > 0
+            display_count = math.min(oblast, brob.size())
+            for i = 0 to display_count - 1
+                brob.get(i).display(brob, i)
+
+if obshow
+    fnOB()
+
+if blinside and blal.inside
+    alert("Price Inside Bullish OB")
+if blcreated and blal.created
+    alert("Bullish OB Formed")
+if blmitigated and blal.mitigated
+    alert("Bullish OB Mitigated")
+if brinside and bral.inside
+    alert("Price Inside Bearish OB")
+if brcreated and bral.created
+    alert("Bearish OB Formed")
+if brmitigated and bral.mitigated
+    alert("Bearish OB Mitigated")
+
+// Trend Strength Gauge
+length = input(9, "HSMA Length")
+color_up = input.color(color.teal, "Color Up", group = "Theme")
+color_dn = input.color(color.white, "Color Down", group = "Theme")
+
+wma  = ta.wma(close, length)
+wma1 = ta.wma(close, length)
+a = 3 * wma - 2 * wma1
+a1 = ta.sma(close, length)
+diff = a - a1
+
+printTable(txt, col, row, color, txt1, col1, row1, color1) => 
+    var table t = table.new(position.bottom_center, 60, 3), 
+                     table.cell(t, col, row, txt, bgcolor = color),
+                     table.cell(t, col1, row1, txt1, bgcolor = color1, text_color = color.white)
+
+x = diff
+length_ = 100
+xMax = ta.highest(x, length_)
+xMin = ta.lowest(x, length_)
+range_ = xMax - xMin
+y = range_ != 0 ? x / range_ : 0
+
+g = math.round(y*40)
+
+color1 = color.from_gradient(g, -2, 2, color_dn, color_up)
+p1 = plot(a, 'HEMA', color1, 2)
+p2 = plot(a1, 'SMA', color1, 2)
+fill(p1, p2, color = color1)
+
+g := g < 0 ? g * -1 : g
+
+if barstate.islast
+    for i = 1 to 40
+        color_ = math.round(y*40) < 0 ? color_dn : color_up
+        color = color.from_gradient(i, 1, 50, color.rgb(0, 137, 123, 100), color_)
+        printTable("", i, 1, color, "V", g, 1, color.rgb(255, 255, 255, 100))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ################## Volume Orderbook (Expo) ##################
+
+// ~~ Inputs 
+src   = input.source(close,"Source")
+rows  = input.int(10,"Rows",0,20,inline="rows")
+mult  = input.float(.5,"Width",.1,2,step=.05,inline="rows")
+poc   = input.bool(false,"POC",inline="rows")
+tbl   = input.bool(false,"Table",inline="table")
+left  = input.int(5,"Left",0,50,5,inline="table")
+tbli  = input.bool(false,"Grid",inline="table")
+
+// ~~ Variables & Arrays 
+var step = 0.0
+var center_price = 0.0
+
+type Table
+    array<box> boxes
+    array<line> lines
+    array<label> lab
+
+// Инициализируем пустые массивы
+var levels  = array.new<float>()
+var volumes = array.new<float>()
+var vols    = array.new<float>(0) 
+var tab     = Table.new(array.new<box>(0), array.new<line>(0), array.new<label>(0))
+
+// Save first candle size и предзаполнение уровней
+if barstate.isfirst
+    step := (high - low) * mult
+    center_price := src
+    
+    // ИСПРАВЛЕНИЕ: Предварительно заполняем массив большим количеством уровней,
+    // чтобы цена гарантированно находилась внутри диапазона.
+    // Создаем 1000 уровней вверх и 1000 вниз от центра.
+    initial_range = 2000 
+    for j = 0 to initial_range
+        levels.push(center_price + (j + 1) * step)
+        volumes.push(0.0)
+        
+    for j = 0 to initial_range
+        levels.push(center_price - (j + 1) * step)
+        volumes.push(0.0)
+    
+    // Сортируем уровни по убыванию, чтобы индекс 0 был самым верхним
+    // Объединяем два массива сложно, поэтому проще просто заполнить сразу в нужном порядке или отсортировать.
+    // Здесь для простоты очистим и заполним одним циклом от +N до -N
+    
+    array.clear(levels)
+    array.clear(volumes)
+    
+    // Заполняем от +1000 шагов до -1000 шагов
+    for k = 1000 to -1000
+        if k != 0
+            levels.push(center_price + k * step)
+            volumes.push(0.0)
+        else
+            // Уровень центра
+            levels.push(center_price)
+            volumes.push(volume)
+
+// Stores each candle volume in levels
+// ИСПРАВЛЕНИЕ: Убедимся, что мы не выходим за пределы массива при проверке
+if levels.size() > 1
+    found = false
+    // Используем levels.size() - 2 для безопасного доступа к i+1
+    for i = 0 to levels.size() - 2
+        lvl1 = levels.get(i)
+        lvl2 = levels.get(i+1)
+        if src < lvl1 and src > lvl2
+            // Безопасная установка объема
+            v_idx = math.min(i, volumes.size() - 1)
+            volumes.set(v_idx, volumes.get(v_idx) + volume)
+            found := true
+            break
+    
+    if not found
+        // Если цена все равно вышла за пределы (маловероятно при init 2000, но возможно на сильных трендах), расширяем массив
+        if src > levels.get(0)
+            lvl = levels.get(0)
+            while src > lvl
+                levels.unshift(lvl + step)
+                volumes.unshift(0)
+                lvl := lvl + step
+            volumes.set(0, volumes.get(0) + volume) // Добавляем объем к новому верхнему уровню
+        else if src < levels.get(levels.size()-1)
+            lvl = levels.get(levels.size()-1)
+            while src < lvl
+                levels.push(lvl - step)
+                volumes.push(0)
+                lvl := lvl - step
+            volumes.set(volumes.size()-1, volumes.get(volumes.size()-1) + volume)
+
+// Динамическое расширение массивов для отрисовки
+required_boxes = rows * 2 + 2
+while tab.boxes.size() < required_boxes
+    tab.boxes.push(box.new(na, na, na, na, border_color = color.new(#787b86, 100), bgcolor = color.new(#787b86, 100)))
+
+required_lines = rows * 2 + 1
+while tab.lines.size() < required_lines
+    tab.lines.push(line.new(na, na, na, na, color = #787b86))
+
+required_labels = rows * 2 + 1
+while tab.lab.size() < required_labels
+    tab.lab.push(label.new(na, na, ""))
+
+// Plots the orderbook
+if barstate.islast
+    for i = 0 to levels.size() - 2
+        if src < levels.get(i) and src > levels.get(i + 1)
+            // Подготовка временного массива vols
+            if vols.size() != (rows*2+1)
+                array.clear(vols)
+                for k = 1 to (rows*2+1)
+                    vols.push(0.0)
+
+            for x_inner = 0 to (rows*2)
+                vol_idx = i - rows + x_inner
+                // ИСПРАВЛЕНИЕ: Проверка границ при чтении volumes
+                if vol_idx >= 0 and vol_idx < volumes.size()
+                    vols.set(x_inner, volumes.get(vol_idx))
+                else
+                    vols.set(x_inner, 0.0)
+
+            vol = vols.copy()
+            vols.sort()
+            
+            for x_inner = 0 to (rows*2)
+                if x_inner < tab.boxes.size()
+                    box.delete(tab.boxes.get(x_inner))
+                
+                col = x_inner < rows ? #ff5252 : x_inner > rows ? #00e676 : #787b86
+                idx_vol = vols.indexof(vol.get(x_inner))
+                
+                lvl_idx_top = math.max(0, i - rows + x_inner)
+                lvl_idx_btm = math.max(1, i - rows + x_inner + 1)
+                
+                // Защита при чтении levels
+                lvl_top = levels.get(math.min(lvl_idx_top, levels.size()-1))
+                lvl_btm = levels.get(math.min(lvl_idx_btm, levels.size()-1))
+                
+                colgrade = color.from_gradient(idx_vol, 0, vols.size(), color.new(col, 80), color.new(col, 40))
+                ext_style = poc and idx_vol == rows * 2 ? extend.left : extend.none
+                
+                new_box = box.new((bar_index + left + rows * 2) - idx_vol, lvl_top,
+                 (bar_index + left + rows * 2) + idx_vol, lvl_btm,
+                 colgrade, bgcolor = colgrade, border_style = line.style_dotted,
+                 text = str.tostring(vol.get(x_inner), format.volume), text_color = chart.fg_color,
+                 extend = ext_style)
+                 
+                tab.boxes.set(x_inner, new_box)
+                
+                if tbli
+                    if x_inner < tab.lines.size()
+                        line.delete(tab.lines.get(x_inner))
+                    
+                    line_lvl_idx = i - rows + x_inner
+                    line_y = line_lvl_idx >= 0 and line_lvl_idx < levels.size() ? levels.get(line_lvl_idx) : na
+                    
+                    new_line = line.new(bar_index + left, line_y, bar_index + left + rows * 2 + vols.size() - 1, line_y, color = #787b86)
+                    tab.lines.set(x_inner, new_line)
+            
+            // Создание рамки таблицы
+            if tbl
+                box_idx = rows * 2 + 1
+                if box_idx < tab.boxes.size()
+                    box.delete(tab.boxes.get(box_idx))
+                    
+                    top_box = tab.boxes.get(0)
+                    btm_box = tab.boxes.get(rows * 2)
+                    
+                    var border_box = box.new(na, na, na, na, #787b86, border_width = 2, bgcolor = color(na))
+                    
+                    if na(top_box) or na(btm_box)
+                        border_box := box.new(na, na, na, na, #787b86, border_width = 2, bgcolor = color(na))
+                    else
+                        bt = box.get_top(top_box)
+                        bb = box.get_bottom(btm_box)
+                        border_box := box.new(bar_index + left, bt, bar_index + left + rows * 2 + vols.size() - 1, bb, #787b86, border_width = 2, bgcolor = color(na))
+                        
+                    tab.boxes.set(box_idx, border_box)
+            break
+
+
+// ╔════════════════════════════════╗
+// ║      Download at               ║
+// ╚════════════════════════════════╝
+// ███████╗██╗███╗   ███╗██████╗ ██╗     ███████╗
+// ██╔════╝██║████╗ ████║██╔══██╗██║     ██╔════╝
+// ███████╗██║██╔████╔██║██████╔╝██║     █████╗  
+// ╚════██║██║██║╚██╔╝██║██╔═══╝ ██║     ██╔══╝  
+// ███████║██║██║ ╚═╝ ██║██║     ███████╗███████╗
+// ╚══════╝╚═╝╚═╝     ╚═╝╚═╝     ╚══════╝╚══════╝
+// ███████╗ ██████╗ ██████╗ ███████╗██╗  ██╗
+// ██╔════╝██╔═══██╗██╔══██╗██╔════╝╚██╗██╔╝
+// █████╗  ██║   ██║██████╔╝█████╗   ╚███╔╝ 
+// ██╔══╝  ██║   ██║██╔══██╗██╔══╝   ██╔██╗ 
+// ██║     ╚██████╔╝██║  ██║███████╗██╔╝ ██╗
+// ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+// ████████╗ ██████╗  ██████╗ ██╗     ███████╗
+// ╚══██╔══╝██╔═══██╗██╔═══██╗██║     ██╔════╝
+//    ██║   ██║   ██║██║   ██║██║     ███████╗
+//    ██║   ██║   ██║██║   ██║██║     ╚════██║
+//    ██║   ╚██████╔╝╚██████╔╝███████╗███████║
+//    ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚══════╝
+
+// ==========================================================================================
+
+// === Dashboard with Telegram Link ===
+var table myTable = table.new(position.top_center, 1, 1, border_width=1, frame_color=color.black, bgcolor=color.white)
+
+// Add Telegram Message to Dashboard
+table.cell(myTable, 0, 0, "Join Telegram @simpleforextools", bgcolor=color.blue, text_color=color.white, text_size=size.normal)
