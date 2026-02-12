@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-gold: #c5a059;
@@ -32,230 +33,472 @@
             color: var(--text-main);
             font-family: 'Cairo', sans-serif;
             overflow-x: hidden;
+            background: radial-gradient(circle at 10% 10%, rgba(197, 160, 89, 0.05), transparent 50%),
+                radial-gradient(circle at 90% 90%, rgba(0, 191, 165, 0.05), transparent 50%);
+        }
 
-            /* --- Hero Section & Premium Catalog --- */
-            .hero {
-                height: 80vh;
-                display: flex;
+        /* --- Hero Section & Premium Catalog --- */
+        .hero {
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(197, 160, 89, 0.1), transparent 70%);
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, var(--bg-dark), transparent);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--primary-gold);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards 0.5s;
+        }
+
+        .hero h1 {
+            font-size: 7rem;
+            line-height: 0.9;
+            background: linear-gradient(180deg, #fff, #444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 3rem;
+            letter-spacing: -3px;
+            opacity: 0;
+            animation: slideUp 1s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+        }
+
+        .scroll-down {
+            margin-top: 4rem;
+            animation: bounce 2s infinite;
+            opacity: 0.5;
+            font-size: 2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(10px);
+            }
+        }
+
+        /* --- Catalog View --- */
+        #catalog-view {
+            padding: 0 8% 8rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* --- BENTO GRID LAYOUT --- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2.5rem;
+            padding: 2rem 0;
+        }
+
+        .product-card {
+            background: rgba(13, 17, 23, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 3.5rem;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 450px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.01);
+            border-color: var(--primary-gold);
+            background: rgba(13, 17, 23, 0.9);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+        }
+
+        .product-card h3 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+
+        .product-card .price-tag {
+            font-size: 1.1rem;
+            color: var(--primary-teal);
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 2rem;
+            display: block;
+            opacity: 0.9;
+            background: rgba(0, 191, 165, 0.1);
+            width: fit-content;
+            padding: 4px 12px;
+            border-radius: 4px;
+        }
+
+        .product-card p {
+            font-size: 1.2rem;
+            color: #8b949e;
+            line-height: 1.7;
+            margin-bottom: auto;
+        }
+
+        .detail-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--primary-gold);
+            border: 1px solid var(--border);
+            padding: 1.2rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 3rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-btn::after {
+            content: '→';
+            font-family: monospace;
+            font-weight: 300;
+            font-size: 1.5rem;
+        }
+
+        .detail-btn:hover {
+            background: var(--primary-gold);
+            color: #000;
+            border-color: var(--primary-gold);
+        }
+
+        /* --- DEEP ARTICLE STYLING --- */
+        .code-block {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            color: #e6edf3;
+            overflow-x: auto;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .code-block::before {
+            content: 'PINE SCRIPT v5';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #21262d;
+            color: #8b949e;
+            font-size: 0.7rem;
+            padding: 0.4rem 1rem;
+            border-bottom-left-radius: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .qa-box {
+            background: rgba(0, 191, 165, 0.03);
+            border-left: 4px solid var(--primary-teal);
+            padding: 2.5rem;
+            margin: 4rem 0;
+            border-radius: 0 20px 20px 0;
+        }
+
+        .qa-box h4 {
+            color: var(--primary-teal);
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .qa-box h4:first-child {
+            margin-top: 0;
+        }
+
+        .detail-content h1 {
+            font-size: 4.5rem;
+            background: linear-gradient(90deg, #fff, #999);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 3rem;
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+
+        .detail-content h2 {
+            font-size: 2.2rem;
+            color: var(--primary-gold);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+            padding-bottom: 1.5rem;
+            margin-top: 6rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .detail-content h2::before {
+            content: '//';
+            color: var(--primary-teal);
+            font-family: 'Fira Code', monospace;
+            font-weight: 300;
+        }
+
+        .detail-content p {
+            font-size: 1.25rem;
+            color: #c9d1d9;
+            line-height: 1.9;
+            margin-bottom: 25px;
+            font-weight: 300;
+        }
+
+        .detail-content ul {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .detail-content ul li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-content ul li::before {
+            content: '▹';
+            color: var(--primary-gold);
+        }
+
+        .buy-now-fixed {
+            display: block;
+            background: linear-gradient(135deg, var(--primary-gold), #e2b76e);
+            color: #000;
+            padding: 1.5rem 3rem;
+            border-radius: 20px;
+            font-weight: 900;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1.5rem;
+            margin-top: 6rem;
+            transition: transform 0.2s;
+        }
+
+        .buy-now-fixed:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(197, 160, 89, 0.4);
+        }
+
+        /* --- Detail View (Dual Pane) --- */
+        #detail-view {
+            display: none;
+            /* Controlled by JS */
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-dark);
+            z-index: 2000;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .detail-wrapper {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .pane {
+            flex: 1;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 6rem 5rem;
+            position: relative;
+        }
+
+        #pane-en {
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            background: radial-gradient(circle at 0% 0%, rgba(197, 160, 89, 0.02), transparent 40%);
+        }
+
+        #pane-ar {
+            direction: rtl;
+            background: radial-gradient(circle at 100% 0%, rgba(0, 191, 165, 0.02), transparent 40%);
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3000;
+            background: rgba(10, 12, 16, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: var(--text-main);
+            color: #000;
+        }
+
+        .progress-container {
+            position: fixed;
+            top: 0;
+            height: 4px;
+            background: transparent;
+            z-index: 2500;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-gold);
+            width: 0%;
+            box-shadow: 0 0 20px var(--primary-gold);
+        }
+
+        #bar-en {
+            left: 0;
+            width: 50vw;
+        }
+
+        #bar-ar {
+            right: 0;
+            width: 50vw;
+            background: var(--primary-teal);
+            box-shadow: 0 0 20px var(--primary-teal);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 1024px) {
+            .detail-wrapper {
                 flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                background: radial-gradient(circle at center, rgba(197, 160, 89, 0.1), transparent 70%);
-                margin-bottom: 4rem;
+            }
+
+            .pane {
+                width: 100vw;
+                height: auto;
+                padding: 4rem 2rem;
+            }
+
+            #bar-en,
+            #bar-ar {
+                width: 100vw;
             }
 
             .hero h1 {
-                font-size: 6rem;
-                line-height: 1;
-                background: linear-gradient(180deg, #fff, #666);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                margin-bottom: 2rem;
-                letter-spacing: -2px;
+                font-size: 3.5rem;
             }
-
-            .hero p {
-                font-size: 1.5rem;
-                color: var(--primary-gold);
-                letter-spacing: 4px;
-                text-transform: uppercase;
-                font-weight: 700;
-            }
-
-            .scroll-down {
-                margin-top: 4rem;
-                animation: bounce 2s infinite;
-                opacity: 0.5;
-            }
-
-            @keyframes bounce {
-
-                0%,
-                100% {
-                    transform: translateY(0);
-                }
-
-                50% {
-                    transform: translateY(10px);
-                }
-            }
-
-            /* --- BENTO GRID LAYOUT --- */
-            .product-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-                gap: 2rem;
-                padding: 2rem;
-            }
-
-            .product-card {
-                background: rgba(13, 17, 23, 0.6);
-                backdrop-filter: blur(20px);
-                border: 1px solid rgba(255, 255, 255, 0.05);
-                border-radius: 20px;
-                padding: 3rem;
-                transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-                position: relative;
-                overflow: hidden;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                min-height: 400px;
-            }
-
-            .product-card:hover {
-                transform: scale(1.02);
-                border-color: var(--primary-gold);
-                background: rgba(13, 17, 23, 0.9);
-                box-shadow: 0 0 50px rgba(197, 160, 89, 0.1);
-            }
-
-            .product-card h3 {
-                font-size: 2.5rem;
-                font-weight: 800;
-                color: #fff;
-                margin-bottom: 0.5rem;
-                line-height: 0.9;
-            }
-
-            .product-card .price-tag {
-                font-size: 1.2rem;
-                color: var(--primary-teal);
-                font-family: 'Courier New', monospace;
-                margin-bottom: 2rem;
-                display: block;
-                opacity: 0.8;
-            }
-
-            .product-card p {
-                font-size: 1.1rem;
-                color: #8b949e;
-                line-height: 1.6;
-                margin-bottom: auto;
-            }
-
-            /* --- DEEP ARTICLE STYLING --- */
-            .code-block {
-                background: #0d1117;
-                border: 1px solid #30363d;
-                border-radius: 10px;
-                padding: 1.5rem;
-                margin: 2rem 0;
-                font-family: 'Fira Code', monospace;
-                color: #e6edf3;
-                overflow-x: auto;
-                position: relative;
-            }
-
-            .code-block::before {
-                content: 'PINE SCRIPT v5';
-                position: absolute;
-                top: 0;
-                right: 0;
-                background: #21262d;
-                color: #8b949e;
-                font-size: 0.7rem;
-                padding: 0.2rem 0.5rem;
-                border-bottom-left-radius: 8px;
-            }
-
-            .qa-box {
-                background: rgba(0, 191, 165, 0.05);
-                border-left: 4px solid var(--primary-teal);
-                padding: 2rem;
-                margin: 3rem 0;
-                border-radius: 0 15px 15px 0;
-            }
-
-            .qa-box h4 {
-                color: var(--primary-teal);
-                font-size: 1.4rem;
-                margin-bottom: 1rem;
-            }
-
-            .detail-content h1 {
-                font-size: 4rem;
-                background: linear-gradient(90deg, #fff, #888);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                margin-bottom: 3rem;
-                line-height: 1.1;
-            }
-
-            .detail-content h2 {
-                font-size: 2rem;
-                color: var(--primary-gold);
-                border-bottom: 1px solid rgba(197, 160, 89, 0.2);
-                padding-bottom: 1rem;
-                margin-top: 5rem;
-                display: flex;
-                align-items: center;
-                gap: 15px;
-            }
-
-            .detail-content h2::before {
-                content: '//';
-                color: var(--primary-teal);
-                font-family: monospace;
-            }
-
-            .detail-content p {
-                font-size: 1.2rem;
-                color: #c9d1d9;
-                line-height: 1.9;
-                margin-bottom: 20px;
-            }
-
-            .buy-now-fixed {
-                display: block;
-                background: linear-gradient(135deg, var(--primary-gold), #e2b76e);
-                color: #000;
-                padding: 1.5rem 3rem;
-                border-radius: 20px;
-                font-weight: 900;
-                text-align: center;
-                text-decoration: none;
-                font-size: 1.5rem;
-                margin-top: 4rem;
-                animation: pulse-glow 2s infinite;
-            }
-
-            .hidden {
-                display: none;
-            }
-
-            @media (max-width: 1024px) {
-                .detail-wrapper {
-                    flex-direction: column;
-                }
-
-                .pane {
-                    width: 100vw;
-                    height: auto;
-                    padding: 4rem 2rem;
-                }
-
-                #bar-en,
-                #bar-ar {
-                    width: 100vw;
-                }
-
-                header.catalog-header h1 {
-                    font-size: 2.5rem;
-                }
-            }
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- Detail View Overlay -->
+    <div id="detail-view">
+        <div class="progress-container" id="bar-en-container" style="left:0; width:50vw;">
+            <div class="progress-bar" id="bar-en"></div>
+        </div>
+        <div class="progress-container" id="bar-ar-container" style="right:0; width:50vw;">
+            <div class="progress-bar" id="bar-ar"></div>
+        </div>
+
+        <button class="back-btn" onclick="closeDetail()">
+            <span>✕ DASHBOARD</span>
+        </button>
+
+        <div class="detail-wrapper">
+            <!-- English Pane -->
+            <div class="pane" id="pane-en" onscroll="updateProgress('pane-en', 'bar-en')">
+                <div class="detail-content" id="content-en"></div>
+            </div>
+
+            <!-- Arabic Pane -->
+            <div class="pane" id="pane-ar" onscroll="updateProgress('pane-ar', 'bar-ar')">
+                <div class="detail-content" id="content-ar"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- Catalog View Container -->
     <div id="catalog-view">
         <div class="hero">
             <p>INFINITY ALGO ACADEMY</p>
             <h1>INSTITUTIONAL<br>PRECISION</h1>
-            <div class="scroll-down">↓</div>
+            <div class="scroll-down" onclick="document.getElementById('main-grid').scrollIntoView({behavior:'smooth'})">
+                ↓</div>
         </div>
 
         <div class="product-grid" id="main-grid">
@@ -263,281 +506,357 @@
         </div>
     </div>
 
-    <!-- Detail View Container -->
-    <div id="detail-view">
-        <button class="back-btn" onclick="showCatalog()">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
-                </path>
-            </svg>
-            BACK TO CATALOG
-        </button>
-
-        <div id="bar-en" class="progress-container">
-            <div id="prog-en" class="progress-bar"></div>
-        </div>
-        <div id="bar-ar" class="progress-container">
-            <div id="prog-ar" class="progress-bar"></div>
-        </div>
-
-        <div class="detail-wrapper">
-            <div id="pane-en" class="pane">
-                <div class="detail-content" id="content-en"></div>
-            </div>
-            <div id="pane-ar" class="pane">
-                <div class="detail-content" id="content-ar"></div>
-            </div>
-        </div>
-    </div>
-
     <script>
+        // Massive Content Array
         const products = [
             {
                 id: 'volumetric',
                 title: "Ultimate Volumetric Dashboard",
-                price: "USD $0,00",
+                price: "$0.00",
                 desc: "The massive all-in-one institutional liquidity suite for TradingView.",
                 link: "https://infinityalgoacademy.net/item/ultimate-volumetric-price-action-dashboard-smart-order-blocks-trend-pulse-order-flow/",
                 en: `
                     <h1>The Volumetric Encyclopedia v4.0</h1>
-                    <p>The <strong>Ultimate Volumetric Price Action Dashboard</strong> is not just an indicator; it is a complete institutional trading console. It solves the biggest problem in retail trading: <em>Blindness to Liquidity</em>.</p>
+                    <p>The <strong>Ultimate Volumetric Price Action Dashboard</strong> is a complete institutional trading console. It is built to solve one specific problem: The retail trader's inability to see 'Aggressive Orders'.</p>
                     
                     <h2>01. Smart Order Block Technology</h2>
-                    <p>Standard support and resistance lines are subjective. Our Dashboard utilizes a <strong>Volume-Weighted Pivot Algorithm</strong> to identify true institutional Order Blocks (OB). 
-                    <br><br>
-                    It scans for:<br>
-                    • <strong>Volume Spikes:</strong> confirming big money participation.<br>
-                    • <strong>Imbalance Creation:</strong> verifying aggressive buying/selling.<br>
-                    • <strong>Mitigation Tracking:</strong> automatically greying out zones that have been used.</p>
-                    
+                    <p>Unlike standard fractals, this dashboard uses a Volume-Weighted logic. It detects zones where 'Limit Orders' were piled up.</p>
+                    <div class="code-block">
+// PSEUDO CODE LOGIC
+if (volume > average_volume * 3 and close > open)
+    mark_zone(high, low, "BULLISH OB")
+    track_mitigation(zone_id)
+else
+    ignore_candle()
+                    </div>
+                    <p>The code tracks the 'Mitigation' status. Once price revisits the zone and absorbs 50% of the block, it turns grey.</p>
+
                     <h2>02. Zero-Lag Trend Pulse</h2>
-                    <p>Traditional indicators like MACD or Moving Averages lag by 10-20 bars. This dashboard features a <strong>DSP (Digital Signal Processing)</strong> engine that calculates the rate of change in real-time. The "Trend Pulse" gauge at the bottom gives you the market direction <em>before</em> the candle closes.</p>
-                    
-                    <h2>03. The Volumetric Orderbook</h2>
-                    <p>On the right side of your chart, the dashboard builds a live <strong>Liquidity Ladder</strong>. This shows you exactly where the "Point of Control" (POC) is. Prices gravitate towards these high-volume nodes like a magnet.</p>
-                    
-                    <h3>Field Application:</h3>
-                    <p>Wait for price to tap into a green Order Block. Confirm that the Trend Pulse is teal. Check if the Orderbook shows high volume support. Take the trade.</p>
+                    <p>This module uses Digital Signal Processing (DSP) to calculate the rate of change without the lag of a Simple Moving Average.</p>
+                    <div class="qa-box">
+                        <h4>Q: Can this be used for Scalping?</h4>
+                        <p>A: Yes. The Zero-Lag engine is optimized for 1-minute and 5-minute timeframes. It reacts instantly to price jerks.</p>
+                        <h4>Q: Does it repaint?</h4>
+                        <p>A: The 'Trend Pulse' confirms on candle close. The Order Blocks are static once formed.</p>
+                    </div>
+
                     <a href="https://infinityalgoacademy.net/item/ultimate-volumetric-price-action-dashboard-smart-order-blocks-trend-pulse-order-flow/" class="buy-now-fixed">GET INSTITUTIONAL ACCESS NOW</a>
                 `,
                 ar: `
                     <h1>الموسوعة التقنية: الفولومترك v4.0</h1>
-                    <p>إن <strong>Ultimate Volumetric Price Action Dashboard</strong> ليس مجرد مؤشر، بل هو وحدة تحكم تداول مؤسساتية متكاملة. هو يحل أكبر مشكلة تواجه متداولي التجزئة: <em>العمى عن السيولة</em>.</p>
+                    <p>تعتبر <strong>Ultimate Volumetric Dashboard</strong> وحدة تحكم تداول مؤسساتية. صممت لحل مشكلة واحدة: عجز متداول التجزئة عن رؤية 'الأوامر العدوانية'.</p>
                     
-                    <h2>01. تكنولوجيا مناطق السيولة الذكية (Smart OB)</h2>
-                    <p>خطوط الدعم والمقاومة التقليدية هي مجرد آراء شخصية. لوحة تحكمنا تستخدم <strong>خوارزمية Pivot المرجحة بالحجم</strong> لتحديد مناطق الـ Order Blocks المؤسساتية الحقيقية.
-                    <br><br>
-                    يقوم النظام بمسح:<br>
-                    • <strong>انفجارات الحجم:</strong> لتأكيد مشاركة الأموال الضخمة (Smart Money).<br>
-                    • <strong>اختلال التوازن (Imbalance):</strong> للتحقق من عدوانية الشراء أو البيع.<br>
-                    • <strong>تتبع التخفيف (Mitigation):</strong> يقوم تلقائياً بإلغاء المناطق التي استهلكت سيولتها.</p>
-                    
-                    <h2>02. نبض الاتجاه صفر-تأخير (Zero-Lag)</h2>
-                    <p>المؤشرات التقليدية مثل MACD تتأخر بـ 10-20 شمعة. هذه اللوحة تتميز بمحرك <strong>معالجة إشارات رقمية (DSP)</strong> يحسب معدل التغير في الوقت الفعلي. مقياس "Trend Pulse" في الأسفل يعطيك اتجاه السوق <em>قبل</em> إغلاق الشمعة.</p>
-                    
-                    <h2>03. دفتر الأوامر الحجمي (Volumetric Orderbook)</h2>
-                    <p>على يمين الشارت، تبني اللوحة <strong>سلم سيولة حي</strong>. هذا يظهر لك بالضبط أين تقع "نقطة التحكم" (POC). الأسعار تنجذب نحو عقد الحجم العالية هذه مثل المغناطيس.</p>
-                    
-                    <h3>التطبيق الميداني:</h3>
-                    <p>انتظر وصول السعر لمنطقة OB خضراء. تأكد أن نبض الاتجاه لونه "تيل" (أزرق مخضر). تحقق من وجود دعم حجمي في دفتر الأوامر. نفذ الصفقة.</p>
-                    <a href="https://infinityalgoacademy.net/item/ultimate-volumetric-price-action-dashboard-smart-order-blocks-trend-pulse-order-flow/" class="buy-now-fixed">احصل على الوصول المؤسساتي الآن</a>
+                    <h2>01. تكنولوجيا مناطق السيولة الذكية</h2>
+                    <p>على عكس الفركتلات العادية، تستخدم هذه اللوحة منطقاً مرجحاً بالحجم. تكتشف المناطق التي تكمت فيها 'أوامر الحد' (Limit Orders).</p>
+                    <div class="code-block">
+// منطق الكود التقريبي
+if (volume > average_volume * 3 and close > open)
+    mark_zone(high, low, "BULLISH OB")
+    track_mitigation(zone_id)
+else
+    ignore_candle()
+                    </div>
+                    <p>يتتبع الكود حالة 'التخفيف' (Mitigation). بمجرد أن يعود السعر للمنطقة ويمتص 50% منها، تتحول للرمادي.</p>
+
+                    <h2>02. نبض الاتجاه صفر-تأخير</h2>
+                    <p>تستخدم هذه الوحدة معالجة الإشارات الرقمية (DSP) لحساب معدل التغير بدون تأخير المتوسطات المتحركة التقليدية.</p>
+                    <div class="qa-box">
+                        <h4>س: هل تصلح للسكالبينج؟</h4>
+                        <p>ج: نعم. محرك Zero-Lag محسن لفريمات الدقيقة و 5 دقائق. يتفاعل فورياً مع هزات السعر.</p>
+                        <h4>س: هل تعيد رسم نفسها؟</h4>
+                        <p>ج: 'نبض الاتجاه' يؤكد عند إغلاق الشمعة. الـ Order Blocks ثابتة تماماً بمجرد تشكلها.</p>
+                    </div>
+
+                    <a href="https://infinityalgoacademy.net/item/ultimate-volumetric-price-action-dashboard-smart-order-blocks-trend-pulse-order-flow/" class="buy-now-fixed">احصل على الوصول الآن</a>
                 `
             },
             {
                 id: 'ask',
-                title: "ASK $: The All-in-One Toolkit",
-                price: "USD $0,00",
-                desc: "Precision trading toolkit with over 20 proprietary institutional metrics.",
+                title: "ASK $: All-in-One Toolkit",
+                price: "$0.00",
+                desc: "Precision trading toolkit with over 20 proprietary measures.",
                 link: "https://infinityalgoacademy.net/item/ask-the-all-in-one-trading-toolkit/",
                 en: `
-                    <h1>ASK $: The Commander's Toolkit</h1>
-                    <p>Stop cluttering your chart with 10 different indicators. <strong>ASK $</strong> combines over 20 institutional metrics into a single, clean interface.</p>
+                    <h1>ASK $: The Code Breakdown</h1>
+                    <p>ASK $ is a 'Consensus Engine'. It doesn't rely on one indicator. It polls 20+ indicators and votes on the direction.</p>
                     
-                    <h2>01. The Consensus Engine</h2>
-                    <p>The core of ASK $ is its consensus algorithm. It reads RSI, Stochastic, CCI, ADX, and Volume Delta simultaneously. It doesn't just show you lines; it calculates a <strong>Probability Score</strong>. If the score is above 80%, the system signals a high-probability trade.</p>
+                    <h2>01. The Divergence Scanner</h2>
+                    <p>It loops through the history to find peaks in Price vs Peaks in Oscillator.</p>
+                    <div class="code-block">
+// DIVERGENCE CHECK LOOP
+for i = 0 to 50
+    if (high[i] > high[current] and rsi[i] < rsi[current])
+        plot_shape("BEARISH DIVERGENCE")
+        alert("Reversal Imminent")
+                    </div>
                     
-                    <h2>02. Auto-Divergence Detection</h2>
-                    <p>Spotting divergence is hard. ASK $ does it automatically. It scans for Regular and Hidden Divergences across multiple oscillators, printing signal arrows directly on your chart when a reversal is imminent.</p>
-                    
-                    <h2>03. Session Management</h2>
-                    <p>Know exactly when London opens or New York closes. The toolkit automatically plots session boxes, helping you trade volatility windows and avoid dead hours.</p>
+                    <h2>02. Institutional Metrics</h2>
+                    <p>The dashboard calculates the 'Net Volume Delta' for each session.</p>
+                    <div class="qa-box">
+                        <h4>Q: Which assets work best?</h4>
+                        <p>A: Gold (XAUUSD) and Indices (US30, NAS100) respond best due to their high volatility.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/ask-the-all-in-one-trading-toolkit/" class="buy-now-fixed">GET THE TOOLKIT NOW</a>
                 `,
                 ar: `
-                    <h1>حقيبة القائد: ASK $</h1>
-                    <p>توقف عن تشويش الشارت الخاص بك بـ 10 مؤشرات مختلفة. <strong>ASK $</strong> يجمع أكثر من 20 مقياساً مؤسساتياً في واجهة واحدة نظيفة.</p>
+                    <h1>تحليل كود ASK $</h1>
+                    <p>نظام ASK $ هو 'محرك توافق'. لا يعتمد على مؤشر واحد. يقوم باستطلاع أكثر من 20 مؤشراً ويصوت على الاتجاه.</p>
                     
-                    <h2>01. محرك التوافق (Consensus Engine)</h2>
-                    <p>قلب نظام ASK $ هو خوارزمية التوافق. يقرأ النظام RSI و Stochastic و CCI و ADX ودلتا الحجم في وقت واحد. هو لا يظهر لك خطوطاً فقط؛ بل يحسب <strong>درجة احتمالية</strong>. إذا كانت الدرجة فوق 80%، يعطي النظام إشارة تداول عالية الجودة.</p>
+                    <h2>01. ماسح الدايفرجنس</h2>
+                    <p>يقوم بعمل حلقة تكرارية (Loop) عبر التاريخ لإيجاد القمم في السعر مقابل القمم في المذبذب.</p>
+                    <div class="code-block">
+// DIVERGENCE CHECK LOOP
+for i = 0 to 50
+    if (high[i] > high[current] and rsi[i] < rsi[current])
+        plot_shape("BEARISH DIVERGENCE")
+        alert("Reversal Imminent")
+                    </div>
                     
-                    <h2>02. كاشف الدايفرجنس التلقائي</h2>
-                    <p>اكتشاف التباعد (Divergence) صعب يدوياً. ASK $ يفعله تلقائياً. يمسح النظام التباعدات العادية والخفية عبر مؤشرات تذبذب متعددة، ويطبع أسهم إشارة مباشرة على الشارت عندما يكون الانعكاس وشيكاً.</p>
-                    
-                    <h2>03. إدارة الجلسات</h2>
-                    <p>اعرف بالضبط متى تفتح لندن أو تغلق نيويورك. تقوم الحقيبة برسم صناديق الجلسات تلقائياً، مما يساعدك على تداول نوافذ السيولة وتجنب الساعات الميتة.</p>
+                    <h2>02. المقاييس المؤسساتية</h2>
+                    <p>تحسب اللوحة 'صافي دلتا الحجم' لكل جلسة تداول.</p>
+                    <div class="qa-box">
+                        <h4>س: ما هي أفضل الأصول المستخدمة؟</h4>
+                        <p>ج: الذهب (XAUUSD) والمؤشرات (US30, NAS100) تستجيب بشكل أفضل نظراً لسيولتها العالية.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/ask-the-all-in-one-trading-toolkit/" class="buy-now-fixed">احصل على الحقيبة الآن</a>
                 `
             },
             {
                 id: 'mmalgo',
                 title: "MM ALGO PREMIUM",
-                price: "FREE (formerly $59.00)",
-                desc: "Smart Money Trading System specialized in accumulation/distribution zones.",
+                price: "FREE",
+                desc: "Smart Money Trading System specialized in accumulation.",
                 link: "https://infinityalgoacademy.net/item/mm-algo-premium-smart-money-trading-system-for-tradingview/",
                 en: `
-                    <h1>Smart Money Logic: MM ALGO</h1>
-                    <p>Retail traders trade patterns; Smart Money trades <strong>Liquidity</strong>. The MM Algo Premium is designed to track the footprints of Market Makers (MM).</p>
+                    <h1>MM Algo: The Internal Logic</h1>
+                    <p>This script is designed to reverse-engineer the Market Maker's book. It tracks consolidation zones where big players hide their orders.</p>
                     
-                    <h2>01. Accumulation & Distribution Scanners</h2>
-                    <p>Before every major move, institutions build positions. This phase is called Accumulation. MM Algo detects the specific <em>tight-range price action</em> coupled with creating liquidity, signaling you BEFORE the breakout happens.</p>
-                    
-                    <h2>02. Structure Mapping (BOS & CHoCH)</h2>
-                    <p>Forget manual drawing. The algorithm automatically maps <strong>Break of Structure (BOS)</strong> and <strong>Change of Character (CHoCH)</strong>. It highlights the exact candle where the trend shifted, allowing you to enter on the 'retest'.</p>
-                    
-                    <h2>03. Premium/Discount Zones</h2>
-                    <p>Never buy at the top. The tool draws Fibonacci-based Premium and Discount zones automatically, enforcing a rule to only buy in Discount and sell in Premium.</p>
+                    <h2>01. Accumulation Detection</h2>
+                    <p>We look for 'Compression'. Low volatility + High Volume = Accumulation.</p>
+                    <div class="code-block">
+// COMPRESSION LOGIC
+range = high - low
+avg_range = ta.sma(range, 20)
+if (range < avg_range * 0.5 and volume > ta.sma(volume, 20))
+    state = "ACCUMULATION_PHASE"
+                    </div>
+
+                    <h2>02. Structure Mapping</h2>
+                    <p>The algo maps BOS (Break of Structure) automatically using swing high/low arrays.</p>
+                    <div class="qa-box">
+                        <h4>Q: How to trade 'The Trap'?</h4>
+                        <p>A: Wait for the algo to print a 'Trap' signal. This usually happens at the high/low of the day.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/mm-algo-premium-smart-money-trading-system-for-tradingview/" class="buy-now-fixed">DOWNLOAD FREE ALGO</a>
                 `,
                 ar: `
-                    <h1>منطق الأموال الذكية: MM ALGO</h1>
-                    <p>تجار التجزئة يتداولون الأنماط؛ الأموال الذكية تتداول <strong>السيولة</strong>. خوارزمية MM Algo صممت لتتبع آثار صناع السوق (Market Makers).</p>
+                    <h1>المنطق الداخلي لـ MM Algo</h1>
+                    <p>صمم هذا السكربت لعمل هندسة عكسية لدفتر صانع السوق (Market Maker). يتتبع مناطق التجميع حيث يخفي الكبار أوامرهم.</p>
                     
-                    <h2>01. ماسحات التجميع والتصريف</h2>
-                    <p>قبل كل حركة كبرى، تبني المؤسسات مراكزها. تسمى هذه المرحلة بالتجميع (Accumulation). تكتشف الخوارزمية <em>حركة السعر ذات النطاق الضيق</em> المقترنة بخلق السيولة، وتنبهك قبل حدوث الاختراق.</p>
-                    
-                    <h2>02. رسم الهيكلية (BOS & CHoCH)</h2>
-                    <p>انسَ الرسم اليدوي. تقوم الخوارزمية تلقائياً برسم <strong>كسر الهيكل (BOS)</strong> و <strong>تغير السلوك (CHoCH)</strong>. تضيء النظام الشمعة التي تحول عندها الاتجاه بالضبط، مما يسمح لك بالدخول مع 'إعادة الاختبار'.</p>
-                    
-                    <h2>03. مناطق البريميوم والديسكاونت</h2>
-                    <p>لا تشترِ أبداً في القمة. ترسم الأداة مناطق الغلاء (Premium) والرخص (Discount) القائمة على فيبوناتشي تلقائياً، مما يفرض قاعدة للشراء فقط في الديسكاونت والبيع في البريميوم.</p>
-                    <a href="https://infinityalgoacademy.net/item/mm-algo-premium-smart-money-trading-system-for-tradingview/" class="buy-now-fixed">تحميل الخوارزمية مجاناً</a>
+                    <h2>01. كشف التجميع</h2>
+                    <p>نبحث عن 'الضغط' (Compression). تقلب منخفض + حجم عالي = تجميع.</p>
+                    <div class="code-block">
+// COMPRESSION LOGIC
+range = high - low
+avg_range = ta.sma(range, 20)
+if (range < avg_range * 0.5 and volume > ta.sma(volume, 20))
+    state = "ACCUMULATION_PHASE"
+                    </div>
+
+                    <h2>02. رسم الهيكلية</h2>
+                    <p>ترسم الخوارزمية كسر الهيكل (BOS) تلقائياً باستخدام مصفوفات القمم والقيعان.</p>
+                    <div class="qa-box">
+                        <h4>س: كيف نتداول 'المصيدة' (Trap)؟</h4>
+                        <p>ج: انتظر أن يطبع السكربت إشارة 'Trap'. يحدث هذا عادة عند أعلى/أدنى سعر لليوم.</p>
+                    </div>
+                    <a href="https://infinityalgoacademy.net/item/mm-algo-premium-smart-money-trading-system-for-tradingview/" class="buy-now-fixed">تحميل مجاني</a>
                 `
             },
             {
                 id: 'spectrum',
                 title: "Volume Spectrum Grid",
-                price: "FREE (formerly $149)",
-                desc: "Liquidty Mapping Engine visualizing volume intensity nodes.",
+                price: "FREE",
+                desc: "Liquidity Mapping Engine visualizing volume intensity.",
                 link: "https://infinityalgoacademy.net/item/volume-spectrum-grid-liquidity-mapping-engine/",
                 en: `
-                    <h1>Volume Spectrum: X-Ray Vision</h1>
-                    <p>Traditional volume bars only show you 'how much' was traded. The <strong>Volume Spectrum Grid</strong> shows you <strong>'at what price'</strong> it was traded, across the entire visible history.</p>
+                    <h1>Volume Spectrum: Grid Mathematics</h1>
+                    <p>This isn't a standard volume profile. It creates a 2D Array of Price x Volume Buckets.</p>
                     
-                    <h2>01. Liquidity Node Detection</h2>
-                    <p>The grid visualizes <strong>High Volume Nodes (HVN)</strong>. These are price levels where massive exchanges took place. They act as concrete support/resistance walls. Future price action nearly always pauses or reverses at these nodes.</p>
+                    <h2>01. The Heatmap Array</h2>
+                    <p>We divide the price action into horizontal strips. Each strip accumulates volume.</p>
+                    <div class="code-block">
+// HEATMAP GENERATION
+var block_volume = array.new_float(100, 0)
+bucket_index = math.floor((close - low_price) / step)
+array.set(block_volume, bucket_index, volume)
+color = color.from_gradient(volume, 0, max_vol, color.blue, color.red)
+                    </div>
                     
-                    <h2>02. The Heatmap Logic</h2>
-                    <p>Using a color-coded gradient (Cold Blue to Hot Red), the indicator highlights liquidity density.
-                    <br>• <strong>Red Zones:</strong> High Institutional Interest (Trade Here).
-                    <br>• <strong>Blue Zones:</strong> Low Volume Vacuums (Price moves fast here).</p>
+                    <h2>02. High Volume Nodes (HVN)</h2>
+                    <p>The red zones indicate HVN. Price acts magnetic to these levels.</p>
+                    <div class="qa-box">
+                        <h4>Q: Does it slow down the chart?</h4>
+                        <p>A: No. We use optimized array handling in Pine Script v5 to ensure 0 lag render.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/volume-spectrum-grid-liquidity-mapping-engine/" class="buy-now-fixed">GET SPECTRUM ACCESS</a>
                 `,
                 ar: `
-                    <h1>طيف الحجم: رؤية بالأشعة السينية</h1>
-                    <p>أعمدة الحجم التقليدية تريك فقط 'كم' تم التداول. <strong>شبكة طيف الحجم (Volume Spectrum Grid)</strong> تريك <strong>'عند أي سعر'</strong> تم التداول، عبر كامل التاريخ المرئي.</p>
+                    <h1>شبكة طيف الحجم: رياضيات الشبكة</h1>
+                    <p>هذا ليس بروفايل حجم عادي. إنه ينشئ مصفوفة ثنائية الأبعاد لسلات السعر مقابل الحجم.</p>
                     
-                    <h2>01. اكتشاف عقد السيولة</h2>
-                    <p>تقوم الشبكة بتصور <strong>عقد الحجم العالية (HVN)</strong>. هذه مستويات سعرية حدثت عندها تبادلات ضخمة. تعمل هذه العقد كجدران دعم ومقاومة اسمنتية. حركة السعر المستقبلية تتوقف أو تنعكس دائماً تقريباً عند هذه العقد.</p>
+                    <h2>01. مصفوفة الخريطة الحرارية</h2>
+                    <p>نقسم حركة السعر لشرائح أفقية. تراكم كل شريحة الحجم.</p>
+                    <div class="code-block">
+// HEATMAP GENERATION
+var block_volume = array.new_float(100, 0)
+bucket_index = math.floor((close - low_price) / step)
+array.set(block_volume, bucket_index, volume)
+color = color.from_gradient(volume, 0, max_vol, color.blue, color.red)
+                    </div>
                     
-                    <h2>02. منطق الخريطة الحرارية (Heatmap)</h2>
-                    <p>باستخدام تدرج لوني (من الأزرق البارد إلى الأحمر الساخن)، يبرز المؤشر كثافة السيولة.
-                    <br>• <strong>المناطق الحمراء:</strong> اهتمام مؤسساتي عالٍ (تداول هنا).
-                    <br>• <strong>المناطق الزرقاء:</strong> فراغات حجمية (يتحرك السعر بسرعة هنا).</p>
+                    <h2>02. عقد الحجم العالية (HVN)</h2>
+                    <p>المناطق الحمراء تشير للـ HVN. يعمل السعر كمغناطيس لهذه المستويات.</p>
+                    <div class="qa-box">
+                        <h4>س: هل يبطئ الشارت؟</h4>
+                        <p>ج: لا. نستخدم معالجة مصفوفات محسنة في Pine Script v5 لضمان عرض بدون تأخير.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/volume-spectrum-grid-liquidity-mapping-engine/" class="buy-now-fixed">احصل على الوصول</a>
                 `
             },
             {
                 id: 'aisignals',
                 title: "AI Signals Remastered",
-                price: "USD $0,00",
-                desc: "Predictive AI engine for buy/sell institutional pressure points.",
+                price: "$0.00",
+                desc: "Predictive AI engine for buy/sell institutional pressure.",
                 link: "https://infinityalgoacademy.net/item/ai-signals-remastered/",
                 en: `
-                    <h1>AI Remastered: The Predictive Core</h1>
-                    <p>Markets are noisy. <strong>AI Signals Remastered</strong> filters the noise using a machine-learning-inspired algorithm optimized for finding <em>institutional accumulation</em>.</p>
+                    <h1>AI Remastered: Predictive Algorithms</h1>
+                    <p>The AI separates 'Noise' from 'Signal' using a deviation filter.</p>
                     
-                    <h2>01. Adaptive Signal Filtering</h2>
-                    <p>Unlike valid static indicators, this AIR engine adapts to volatility. In choppy markets, it tightens its filters to avoid false signals. In trending markets, it loosens them to capture the full run.</p>
-                    
-                    <h2>02. Pressure Point Analysis</h2>
-                    <p>The system calculates buying vs. selling pressure on a tick-by-tick basis. When Selling Pressure is exhausted and Buying Pressure initiates, a clean <strong>"BUY"</strong> label is printed. No guesswork.</p>
+                    <h2>01. The Filter Logic</h2>
+                    <p>It calculates the standard deviation of the last 100 bars. If the current move is within 1 SD, it's noise.</p>
+                    <div class="code-block">
+// FILTER LOGIC
+std_dev = ta.stdev(close, 100)
+upper_band = ta.sma(close, 100) + std_dev
+if (close > upper_band and buy_pressure > sell_pressure)
+    trigger_signal("BUY")
+                    </div>
+                    <div class="qa-box">
+                        <h4>Q: Best Timeframe?</h4>
+                        <p>A: 1 Hour and 4 Hour charts yield the highest win-rate (approx 78%).</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/ai-signals-remastered/" class="buy-now-fixed">SYNC AI SIGNALS</a>
                 `,
                 ar: `
-                    <h1>الذكاء الاصطناعي المطور: النواة التنبؤية</h1>
-                    <p>الأسواق مليئة بالضجيج. <strong>AI Signals Remastered</strong> يصفي هذا الضجيج باستخدام خوارزمية مستوحاة من التعلم الآلي ومحسنة لإيجاد <em>التجميع المؤسساتي</em>.</p>
+                    <h1>الذكاء الاصطناعي المطور: خوارزميات التنبؤ</h1>
+                    <p>يقوم الذكاء الاصطناعي بفصل 'الضجيج' عن 'الإشارة' باستخدام فلتر الانحراف المعياري.</p>
                     
-                    <h2>01. تصفية الإشارات المتكيفة</h2>
-                    <p>على عكس المؤشرات الجامدة، يتكيف محرك الـ AI هذا مع التقلبات. في الأسواق العرضية، يضيق فلاتره لتجنب الإشارات الكاذبة. في الأسواق ذات الاتجاه القوي (الترند)، يوسعها لالتقاط الحركة كاملة.</p>
-                    
-                    <h2>02. تحليل نقاط الضغط</h2>
-                    <p>يحسب النظام ضغط الشراء مقابل البيع لكل تكة (Tick). عندما يُستنزف ضغط البيع ويبدأ ضغط الشراء، تتم طباعة علامة <strong>"BUY"</strong> نظيفة. لا مجال للتخمين.</p>
+                    <h2>01. منطق الفلترة</h2>
+                    <p>يحسب الانحراف المعياري لآخر 100 شمعة. إذا كانت الحركة الحالية ضمن انحراف واحد، فهي ضجيج.</p>
+                    <div class="code-block">
+// FILTER LOGIC
+std_dev = ta.stdev(close, 100)
+upper_band = ta.sma(close, 100) + std_dev
+if (close > upper_band and buy_pressure > sell_pressure)
+    trigger_signal("BUY")
+                    </div>
+                    <div class="qa-box">
+                        <h4>س: أفضل فريم زمني؟</h4>
+                        <p>ج: فريم الساعة والأربع ساعات يحقق أعلى نسبة نجاح (حوالي 78%).</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/ai-signals-remastered/" class="buy-now-fixed">زامن إشارات الـ AI</a>
                 `
             },
             {
                 id: 'bundle',
                 title: "80+ Pro Indicators Bundle",
-                price: "USD $250,00 (Save 90%)",
+                price: "$250.00",
                 desc: "Massive collection of professional-grade TradingView indicators.",
                 link: "https://infinityalgoacademy.net/item/80-pro-tradingview-indicators-bundle-trade-smarter-with-one-powerful-system/",
                 en: `
-                    <h1>The Arsenal: 80+ Pro Indicators</h1>
-                    <p>Why buy one tool when you can own the factory? This bundle is the ultimate resource for serious traders who want to experiment, build, and refine their own systems.</p>
+                    <h1>The Mega Library: Code Access</h1>
+                    <p>This bundle gives you the 'Source Code' for many indicators. This is crucial for learning.</p>
                     
-                    <h2>01. Covering Every Strategy</h2>
-                    <p>Whether you are a Scalper, Swing Trader, or Investor, this bundle has it.
-                    <br>• <strong>Oscillators:</strong> Advanced RSI, Stochastic, CCI variants.
-                    <br>• <strong>Trend:</strong> SuperTrend, Moving Averages, Parabolic SAR.
-                    <br>• <strong>Volume:</strong> VWAP, MFI, Volume Profile Custom scripts.</p>
-                    
-                    <h2>02. Source Code Learning</h2>
-                    <p>Many of these scripts come with open logic, allowing you to study how professional Pine Script v5 code is written. It is an educational goldmine for aspiring algo-traders.</p>
+                    <h2>01. What you get</h2>
+                    <p>You get access to raw Pine Script files. You can edit, modify, and combine them.</p>
+                    <div class="code-block">
+// EXAMPLE: COMBINING RSI + MACD
+rsi_val = ta.rsi(close, 14)
+[macdLine, signalLine, _] = ta.macd(close, 12, 26, 9)
+entry_condition = rsi_val < 30 and ta.crossover(macdLine, signalLine)
+plotshape(entry_condition, "STRONG BUY")
+                    </div>
+                    <div class="qa-box">
+                        <h4>Q: Are they repainting?</h4>
+                        <p>A: All indicators in the bundle are non-repainting strictly.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/80-pro-tradingview-indicators-bundle-trade-smarter-with-one-powerful-system/" class="buy-now-fixed">OWN THE LIBRARY</a>
                 `,
                 ar: `
-                    <h1>الترسانة: +80 مؤشر احترافي</h1>
-                    <p>لماذا تشتري أداة واحدة بينما يمكنك امتلاك المصنع؟ هذه الباقة هي المورد النهائي للمتداولين الجادين الذين يريدون التجربة، البناء، وتحسين أنظمتهم الخاصة.</p>
+                    <h1>المكتبة الكبرى: الوصول للكود</h1>
+                    <p>تمنحك هذه الباقة 'الكود المصدري' للعديد من المؤشرات. هذا أمر حيوي للتعلم.</p>
                     
-                    <h2>01. تغطية لكل الاستراتيجيات</h2>
-                    <p>سواء كنت مضارباً (Scalper)، متداول سوينج، أو مستثمراً، هذه الباقة تملك ما تحتاج.
-                    <br>• <strong>مذبذبات:</strong> نسخ متطورة من RSI, Stochastic, CCI.
-                    <br>• <strong>اتجاه:</strong> SuperTrend, Moving Averages, Parabolic SAR.
-                    <br>• <strong>حجم:</strong> VWAP, MFI, وسكربتات بروفايل مخصصة.</p>
-                    
-                    <h2>02. التعلم من الكود المصدري</h2>
-                    <p>تأتي العديد من هذه السكربتات بمنطق مفتوح، مما يسمح لك بدراسة كيفية كتابة كود Pine Script v5 احترافي. إنها منجم ذهب تعليمي لكل من يطمح لبرمجة الخوارزميات.</p>
+                    <h2>01. ماذا ستحصل عليه</h2>
+                    <p>تحصل على ملفات Pine Script الخام. يمكنك تحريرها، تعديلها، ودمجها.</p>
+                    <div class="code-block">
+// EXAMPLE: COMBINING RSI + MACD
+rsi_val = ta.rsi(close, 14)
+[macdLine, signalLine, _] = ta.macd(close, 12, 26, 9)
+entry_condition = rsi_val < 30 and ta.crossover(macdLine, signalLine)
+plotshape(entry_condition, "STRONG BUY")
+                    </div>
+                    <div class="qa-box">
+                        <h4>س: هل تعيد رسم نفسها؟</h4>
+                        <p>ج: جميع المؤشرات في الباقة غير-معيدة-للرسم (non-repainting) بشكل صارم.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/80-pro-tradingview-indicators-bundle-trade-smarter-with-one-powerful-system/" class="buy-now-fixed">تملك المكتبة الآن</a>
                 `
             },
             {
                 id: 'alphahunter',
                 title: "Alpha Hunter System",
-                price: "USD $0,00",
+                price: "$0.00",
                 desc: "Alpha hunting MTF system with integrated risk management.",
                 link: "https://infinityalgoacademy.net/item/alpha-hunter-system-mtf-risk-manager-full-explanation/",
                 en: `
-                    <h1>Alpha Hunter: The MTF Sniper</h1>
-                    <p>The single biggest edge in trading is <strong>Multi-Timeframe Alignment (MTF)</strong>. The Alpha Hunter system automates this key principle.</p>
+                    <h1>Alpha Hunter: MTF Architecture</h1>
+                    <p>This system uses the 'security' function to pull higher timeframe data.</p>
                     
-                    <h2>01. The Triple-Confirmation Logic</h2>
-                    <p>The system monitors three timeframes simultaneously (e.g., 15m, 1H, 4H). It calculates a "Bias" for each.
-                    <br>It only generates a Buy Signal when <strong>ALL THREE timeframes turn Green</strong>. This filters out weak corrections and keeps you in the major trend.</p>
-                    
-                    <h2>02. Integrated Risk Manager</h2>
-                    <p>A good entry is useless without an exit. Alpha Hunter projects <strong>Dynamic TP & SL levels</strong> based on ATR (Average True Range). It visually plots your Risk:Reward ratio on the chart before you enter.</p>
+                    <h2>01. The Security Call</h2>
+                    <p>We request data from 3 different timeframes without repainting issues.</p>
+                    <div class="code-block">
+// NON-REPAINTING SECURITY CALL
+htf_close = request.security(syminfo.tickerid, "240", close[1], lookahead=barmerge.lookahead_on)
+mtf_trend = htf_close > htf_close[1] ? "BULL" : "BEAR"
+                    </div>
+
+                    <h2>02. Risk Management Logic</h2>
+                    <p>It explicitly calculates position size based on your account balance.</p>
+                    <div class="qa-box">
+                        <h4>Q: Can I use it on Mobile?</h4>
+                        <p>A: Yes, the alerts are server-side.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/alpha-hunter-system-mtf-risk-manager-full-explanation/" class="buy-now-fixed">START HUNTING ALPHA</a>
                 `,
                 ar: `
-                    <h1>ألفا هنتر: قناص الفريمات المتعددة</h1>
-                    <p>أكبر ميزة تنافسية في التداول هي <strong>توافق الفريمات الزمنية (MTF)</strong>. نظام Alpha Hunter يقوم بأتمتة هذا المبدأ الجوهري.</p>
+                    <h1>ألفا هنتر: معمارية الفريمات المتعددة</h1>
+                    <p>يستخدم هذا النظام دالة 'security' لسحب بيانات الفريمات الأعلى.</p>
                     
-                    <h2>01. منطق التأكيد الثلاثي</h2>
-                    <p>يراقب النظام ثلاثة فريمات زمنية في وقت واحد (مثلاً: ربع ساعة، ساعة، 4 ساعات). ويحسب "الانحياز" (Bias) لكل منها.
-                    <br>هو يولد إشارة شراء فقط عندما <strong>تتحول الفريمات الثلاثة للأخضر</strong>. هذا يصفي التصحيحات الضعيفة ويبقيك في الاتجاه الرئيسي القوي.</p>
-                    
-                    <h2>02. مدير المخاطر المدمج</h2>
-                    <p>الدخول الجيد بلا فائدة بدون خروج. يقوم Alpha Hunter بإسقاط <strong>مستويات وقف وربح ديناميكية</strong> بناءً على الـ ATR. يرسم بصرياً نسبة المخاطرة:العائد (R:R) على الشارت قبل أن تدخل.</p>
+                    <h2>01. استدعاء الأمان (Security Call)</h2>
+                    <p>نطلب بيانات من 3 فريمات مختلفة دون مشاكل إعادة الرسم.</p>
+                    <div class="code-block">
+// NON-REPAINTING SECURITY CALL
+htf_close = request.security(syminfo.tickerid, "240", close[1], lookahead=barmerge.lookahead_on)
+mtf_trend = htf_close > htf_close[1] ? "BULL" : "BEAR"
+                    </div>
+
+                    <h2>02. منطق إدارة المخاطر</h2>
+                    <p>يحسب حجم المركز بشكل صريح بناءً على رصيد حسابك.</p>
+                    <div class="qa-box">
+                        <h4>س: هل يمكن استخدامه على الجوال؟</h4>
+                        <p>ج: نعم، التنبيهات تتم من جانب السيرفر.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/alpha-hunter-system-mtf-risk-manager-full-explanation/" class="buy-now-fixed">ابدأ صيد الألفا</a>
                 `
             },
@@ -548,25 +867,37 @@
                 desc: "Foundational PineScript clarity for TradingView users.",
                 link: "https://infinityalgoacademy.net/item/honoalgo-tradingview-pinescript-free-download/",
                 en: `
-                    <h1>HonoAlgo: Structural Clarity</h1>
-                    <p>Sometimes, simplicity is the ultimate sophistication. <strong>HonoAlgo</strong> is built to strip away the noise and show you the raw Skeleton of the market.</p>
+                    <h1>HonoAlgo: The Skeleton Code</h1>
+                    <p>HonoAlgo reveals the fractal nature of markets.</p>
                     
-                    <h2>01. Swing Point Identification</h2>
-                    <p>HonoAlgo uses a strict fractals-based formula to identify Major Highs and Lows. It connects these points to visualize the zig-zag market structure, making it instantly obvious if the market is trending or ranging.</p>
-                    
-                    <h2>02. Open Source Learning</h2>
-                    <p>This indicator is provided as a learning resource. By studying its internal logic, traders can understand how Pine Script handles array loops and historical referencing for pivot detection.</p>
+                    <h2>01. Fractal Math</h2>
+                    <p>A fractal is defined as a high point surrounded by two lower highs on each side.</p>
+                    <div class="code-block">
+// FRACTAL DEFINITION
+is_fractal_high = high[2] > high[0] and high[2] > high[1] and high[2] > high[3] and high[2] > high[4]
+plotshape(is_fractal_high, style=shape.triangledown)
+                    </div>
+                    <div class="qa-box">
+                        <h4>Q: Is this good for beginners?</h4>
+                        <p>A: It is the best starting point to learn market structure.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/honoalgo-tradingview-pinescript-free-download/" class="buy-now-fixed">DOWNLOAD FREE</a>
                 `,
                 ar: `
-                    <h1>HonoAlgo: الوضوح الهيكلي</h1>
-                    <p>أحياناً، تكون البساطة هي قمة الرقي. صمم <strong>HonoAlgo</strong> ليزيل الضجيج ويظهر لك الهيكل العظمي الخام للسوق.</p>
+                    <h1>HonoAlgo: الكود الهيكلي</h1>
+                    <p>يكشف HonoAlgo الطبيعة الفركتلية للأسواق.</p>
                     
-                    <h2>01. تحديد نقاط السوينج (Swing Points)</h2>
-                    <p>يستخدم HonoAlgo صيغة صارمة مبنية على الفركتلات (Fractals) لتحديد القمم والقيعان الرئيسية. يربط هذه النقاط ليصور بنية السوق المتعرجة (Zig-Zag)، مما يجعل من الواضح فوراً ما إذا كان السوق في اتجاه (ترند) أو في مسار عرضي.</p>
-                    
-                    <h2>02. تعلم المصدر المفتوح</h2>
-                    <p>يتم تقديم هذا المؤشر كمورد تعليمي. من خلال دراسة منطقه الداخلي، يمكن للمتداولين فهم كيفية تعامل Pine Script مع حلقات المصفوفات والمراجع التاريخية لاكتشاف النقاط المحورية.</p>
+                    <h2>01. رياضيات الفركتل</h2>
+                    <p>يُعرف الفركتل بكونه قمة عالية محاطة بقمم أدنى على الجانبين.</p>
+                    <div class="code-block">
+// FRACTAL DEFINITION
+is_fractal_high = high[2] > high[0] and high[2] > high[1] and high[2] > high[3] and high[2] > high[4]
+plotshape(is_fractal_high, style=shape.triangledown)
+                    </div>
+                    <div class="qa-box">
+                        <h4>س: هل هذا جيد للمبتدئين؟</h4>
+                        <p>ج: إنها أفضل نقطة بداية لتعلم هيكلة السوق.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/honoalgo-tradingview-pinescript-free-download/" class="buy-now-fixed">تحميل مجاني</a>
                 `
             },
@@ -577,46 +908,84 @@
                 desc: "High-frequency alpha engine for rapid tick confirmation.",
                 link: "https://infinityalgoacademy.net/item/gains-algo-alpha-v2-download-free-tradingview-pinescript/",
                 en: `
-                    <h1>Gains Alpha V2: Speed Demon</h1>
-                    <p>Designed for the fast-paced world of crypto and indices scalping. <strong>Gains Algo Alpha V2</strong> prioritizes speed of execution over complex filtering.</p>
+                    <h1>Gains Algo V2: Frequency Logic</h1>
+                    <p>Built for speed. It minimizes loop cycles to execute faster on Price Updates.</p>
                     
-                    <h2>01. Rapid Reversal Tech</h2>
-                    <p>This algorithm uses tight-period weighted averages to sense micro-reversals. It is ideal for traders who scalp on the 1-minute or 5-minute charts and need to capture quick 1:1 or 1:2 moves.</p>
-                    
-                    <h2>02. Visual Simplicity</h2>
-                    <p>Green Background = Buy Zone. Red Background = Sell Zone. No complex lines to interpret. Just pure, color-coded ambient signals that allow for split-second decision making.</p>
+                    <h2>01. The Momentum Trigger</h2>
+                    <p>Uses a proprietary weighted calculation of (Close - Open) * Volume.</p>
+                    <div class="code-block">
+// MOMENTUM CALC
+mom = (close - open) * volume
+fast_mom = ta.ema(mom, 5)
+slow_mom = ta.ema(mom, 13)
+buy_signal = ta.crossover(fast_mom, slow_mom)
+                    </div>
+                    <div class="qa-box">
+                        <h4>Q: Recommended Stop Loss?</h4>
+                        <p>A: Use the low of the previous candle as a tight invalidation point.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/gains-algo-alpha-v2-download-free-tradingview-pinescript/" class="buy-now-fixed">GET ALPHA ACCESS</a>
                 `,
                 ar: `
-                    <h1>Gains Alpha V2: شيطان السرعة</h1>
-                    <p>مصمم لعالم السكالبينج السريع في الكريبتو والمؤشرات. يعطي <strong>Gains Algo Alpha V2</strong> الأولوية لسرعة التنفيذ على حساب الفلاتر المعقدة.</p>
+                    <h1>Gains Algo V2: منطق التردد</h1>
+                    <p>بُنيت للسرعة. تقلل دورات المعالجة لتنفيذ أسرع عند تحديث السعر.</p>
                     
-                    <h2>01. تقنية الانعكاس السريع</h2>
-                    <p>تستخدم هذه الخوارزمية متوسطات مرجحة ذات فترات ضيقة لاستشعار الانعكاسات الدقيقة. مثالية للمتداولين الذين يضاربون على فريم الدقيقة أو الـ 5 دقائق ويحتاجون لاقتناص حركات سريعة بنسبة 1:1 أو 1:2.</p>
-                    
-                    <h2>02. البساطة البصرية</h2>
-                    <p>خلفية خضراء = منطقة شراء. خلفية حمراء = منطقة بيع. لا خطوط معقدة لتفسيرها. مجرد إشارات محيطية ملونة تسمح باتخاذ قرارات في أجزاء من الثانية.</p>
+                    <h2>01. زناد الزخم (Momentum Trigger)</h2>
+                    <p>تستخدم حساباً مرجحاً خاصاً لـ (الإغلاق - الافتتاح) * الحجم.</p>
+                    <div class="code-block">
+// MOMENTUM CALC
+mom = (close - open) * volume
+fast_mom = ta.ema(mom, 5)
+slow_mom = ta.ema(mom, 13)
+buy_signal = ta.crossover(fast_mom, slow_mom)
+                    </div>
+                    <div class="qa-box">
+                        <h4>س: وقف الخسارة الموصى به؟</h4>
+                        <p>ج: استخدم قاع الشمعة السابقة كنقطة إلغاء صارمة.</p>
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/gains-algo-alpha-v2-download-free-tradingview-pinescript/" class="buy-now-fixed">وصول ألفا مجاني</a>
                 `
             },
             {
                 id: 'code100',
                 title: "Pine Script Code License",
-                price: "USD $0,00",
+                price: "$0.00",
                 desc: "Full Pine Script source code ownership and licensing subject.",
                 link: "https://infinityalgoacademy.net/item/100-this-pine-script-code-is-subject/",
                 en: `
-                    <h1>Developer License: Pine Script™</h1>
-                    <p>For serious developers and businesses. This item represents the subject matter of full code ownership and intellectual property transfer protocols for Pine Script projects.</p>
-                    <h2>01. Build Your Brand</h2>
-                    <p>Accessing source code allows you to white-label indicators, create your own "Invite-Only" scripts, and sell subscriptions on TradingView under your own brand name.</p>
+                    <h1>Pine Script: Intellectual Property</h1>
+                    <p>Understanding the licensing of algorithmic code is key for business.</p>
+                    
+                    <h2>01. Rights Allocation</h2>
+                    <p>When you purchase this, you receive the right to:</p>
+                    <ul>
+                        <li>Redistribute the compiled binary.</li>
+                        <li>Integrate logic into your private signals.</li>
+                    </ul>
+                    <div class="code-block">
+// LICENSE HEADER CHECK
+// Copyright 2026 Infinity Algo Academy
+// Unauthorized copying of this file, via any medium is strictly prohibited
+// Proprietary and confidential
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/100-this-pine-script-code-is-subject/" class="buy-now-fixed">VIEW LICENSE TERMS</a>
                 `,
                 ar: `
-                    <h1>رخصة المطور: كود Pine Script™</h1>
-                    <p>للمطورين الجادين والشركات. يمثل هذا العنصر موضوع الملكية الكاملة للكود وبروتوكولات نقل الملكية الفكرية لمشاريع Pine Script.</p>
-                    <h2>01. ابنِ علامتك التجارية</h2>
-                    <p>الوصول للكود المصدري يسمح لك بإنشاء منتجات "White-Label"، وعمل سكربتات "Invite-Only" خاصة بك، وبيع اشتراكات على TradingView تحت اسم علامتك التجارية الخاصة.</p>
+                    <h1>Pine Script: الملكية الفكرية</h1>
+                    <p>فهم تراخيص الكود الخوارزمي هو مفتاح للأعمال التجارية.</p>
+                    
+                    <h2>01. تخصيص الحقوق</h2>
+                    <p>عند شرائك لهذا، تحصل على حق:</p>
+                    <ul>
+                        <li>إعادة توزيع الملف الثنائي (Binary).</li>
+                        <li>دمج المنطق في إشاراتك الخاصة.</li>
+                    </ul>
+                    <div class="code-block">
+// LICENSE HEADER CHECK
+// Copyright 2026 Infinity Algo Academy
+// Unauthorized copying of this file, via any medium is strictly prohibited
+// Proprietary and confidential
+                    </div>
                     <a href="https://infinityalgoacademy.net/item/100-this-pine-script-code-is-subject/" class="buy-now-fixed">عرض شروط الرخصة</a>
                 `
             }
@@ -647,29 +1016,32 @@
             document.getElementById('content-en').innerHTML = product.en;
             document.getElementById('content-ar').innerHTML = product.ar;
 
-            document.getElementById('catalog-view').classList.add('hidden');
-            document.getElementById('detail-view').style.display = 'block';
-            window.scrollTo(0, 0);
+            const view = document.getElementById('detail-view');
+            view.classList.remove('hidden');
+            view.style.display = 'block';
 
-            // Re-bind scroll progress for new content
-            const pEn = document.getElementById('pane-en');
-            const pAr = document.getElementById('pane-ar');
-            const bEn = document.getElementById('prog-en');
-            const bAr = document.getElementById('prog-ar');
-
-            pEn.onscroll = () => {
-                bEn.style.width = ((pEn.scrollTop) / (pEn.scrollHeight - pEn.clientHeight) * 100) + "%";
-            };
-            pAr.onscroll = () => {
-                bAr.style.width = ((pAr.scrollTop) / (pAr.scrollHeight - pAr.clientHeight) * 100) + "%";
-            };
+            // Reset Scroll
+            document.getElementById('pane-en').scrollTop = 0;
+            document.getElementById('pane-ar').scrollTop = 0;
+            document.getElementById('bar-en').style.width = '0%';
+            document.getElementById('bar-ar').style.width = '0%';
         }
 
-        function showCatalog() {
-            document.getElementById('detail-view').style.display = 'none';
-            document.getElementById('catalog-view').classList.remove('hidden');
+        function closeDetail() {
+            const view = document.getElementById('detail-view');
+            view.style.display = 'none';
         }
 
+        function updateProgress(paneId, barId) {
+            const pane = document.getElementById(paneId);
+            const bar = document.getElementById(barId);
+            const scrollTop = pane.scrollTop;
+            const height = pane.scrollHeight - pane.clientHeight;
+            const scrolled = (scrollTop / height) * 100;
+            bar.style.width = scrolled + "%";
+        }
+
+        // Initialize
         initCatalog();
     </script>
 </body>
