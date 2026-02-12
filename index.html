@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Volumetric Dashboard | Deep Intelligence Portal</title>
+    <title>Infinity Algo Master Catalog | Exclusive Trading Intelligence</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap"
@@ -35,7 +35,6 @@
             height: 100vh;
         }
 
-        /* Split Screen Container */
         .wrapper {
             display: flex;
             width: 100vw;
@@ -52,7 +51,6 @@
             scrollbar-color: var(--primary-gold) var(--bg-dark);
         }
 
-        /* Progress Bars */
         .progress-container {
             position: fixed;
             top: 0;
@@ -68,6 +66,16 @@
             box-shadow: 0 0 15px rgba(197, 160, 89, 0.5);
         }
 
+        #bar-en {
+            left: 0;
+            width: 50vw;
+        }
+
+        #bar-ar {
+            right: 0;
+            width: 50vw;
+        }
+
         #pane-en {
             border-right: 1px solid var(--border);
             background: radial-gradient(circle at 10% 10%, rgba(197, 160, 89, 0.05), transparent 50%);
@@ -78,7 +86,6 @@
             background: radial-gradient(circle at 90% 10%, rgba(0, 191, 165, 0.05), transparent 50%);
         }
 
-        /* Headers & Labels */
         .pane-label {
             position: sticky;
             top: 0;
@@ -104,7 +111,6 @@
             margin-bottom: 2rem;
             color: #fff;
             line-height: 1.1;
-            letter-spacing: -1px;
         }
 
         h2 {
@@ -114,107 +120,61 @@
             color: var(--primary-gold);
             border-bottom: 2px solid var(--border);
             padding-bottom: 1rem;
-            position: relative;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 60px;
-            height: 2px;
-            background: var(--primary-teal);
-        }
-
-        [lang="ar"] h2::after {
-            left: auto;
-            right: 0;
-        }
-
-        h3 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin: 3rem 0 1.5rem;
-            color: var(--primary-teal);
-            display: flex;
-            align-items: center;
-            gap: 15px;
         }
 
         p {
             font-size: 1.2rem;
-            font-weight: 400;
             color: var(--text-muted);
             margin-bottom: 2rem;
             line-height: 1.9;
             text-align: justify;
         }
 
-        /* Tech Sections */
-        .tech-card {
+        .article-section {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 3rem;
-            border-radius: 30px;
-            margin-bottom: 3rem;
+            padding: 4rem;
+            border-radius: 40px;
+            margin-bottom: 6rem;
             transition: var(--transition);
         }
 
-        .tech-card:hover {
+        .article-section:hover {
             border-color: var(--primary-gold);
-            transform: translateY(-5px);
             background: rgba(197, 160, 89, 0.03);
         }
 
-        .code-block {
-            background: #010409;
-            border: 1px solid #30363d;
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 2.5rem 0;
-            font-family: 'Fira Code', monospace;
-            font-size: 1rem;
-            overflow-x: auto;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .qa-grid {
-            display: grid;
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .qa-item {
-            background: var(--bg-panel);
-            padding: 2.5rem;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .q {
-            color: #fff;
-            font-weight: 800;
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .a {
-            color: var(--text-muted);
+        .cta-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-gold), #e2b76e);
+            color: #000;
+            padding: 1.2rem 3rem;
+            border-radius: 15px;
+            font-weight: 900;
+            text-decoration: none;
             font-size: 1.1rem;
-            line-height: 1.7;
+            transition: var(--transition);
+            margin-top: 2rem;
+            animation: pulse-glow 2s infinite;
         }
 
-        /* Progress Bar width helpers */
-        #bar-en {
-            left: 0;
-            width: 50vw;
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 20px rgba(197, 160, 89, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(197, 160, 89, 0);
+            }
         }
 
-        #bar-ar {
-            right: 0;
-            width: 50vw;
+        .cta-btn:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
         }
 
         @media (max-width: 1200px) {
@@ -234,20 +194,12 @@
             #bar-en,
             #bar-ar {
                 width: 100vw;
-                height: 12px;
-                position: sticky;
-                top: 0;
-            }
-
-            h1 {
-                font-size: 2.5rem;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Top Progress Indicators -->
     <div id="bar-en" class="progress-container">
         <div id="progress-en" class="progress-bar"></div>
     </div>
@@ -256,143 +208,180 @@
     </div>
 
     <div class="wrapper">
-        <!-- ENGLISH PANE -->
         <div id="pane-en" class="pane">
-            <div class="pane-label">Institutional Core: v4.0.0 (EN)</div>
+            <div class="pane-label">Master Catalog: Global (EN)</div>
+            <h1>The Institutional Trading Fleet</h1>
+            <p>Explore our elite range of TradingView tools designed to expose market liquidity and institutional flow.
+            </p>
 
-            <h1>Smart Liquidity &<br>Order Flow Intelligence</h1>
-            <p>Welcome to the era of algorithmic precision. This documentation isn't just a manual; it's a deep-dive
-                into the Market Micromarket structure. We leverage <strong>Digital Signal Processing (DSP)</strong> and
-                <strong>Volume Profiling</strong> to expose institutional intent before it hits the tape.</p>
-
-            <h2>01. Volumetric Order Blocks (VOB)</h2>
-            <div class="tech-card">
-                <h3>The Mitigation Theory</h3>
-                <p>An Order Block isn't just 'supply or demand'. It is a cluster of <strong>unfilled institutional limit
-                        orders</strong>. When price revisits these zones, institutions 'mitigate' their risk. Our
-                    algorithm detects these zones by identifying <strong>Volume Spikes</strong> coupled with
-                    <strong>Market Structure Breaks (MSB)</strong>.</p>
-                <div class="code-block">
-                    <code style="color: #d1d5db;">
-                        <span style="color: #ff7b72;">method</span> <span style="color: #d2a8ff;">isValidOB</span>(float pivot_v, float v_thresh) =><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;pivot_v > v_thresh <span style="color: #ff7b72;">and</span> <span style="color: #d2a8ff;">ta.change</span>(msb) != 0
-                    </code>
-                </div>
-                <p>This code ensures we only draw blocks where high-volume institutions were active, filtering out 90%
-                    of retail 'fake' zones.</p>
+            <!-- Product 1 -->
+            <div class="article-section">
+                <h2>01. Ultimate Volumetric price action Dashboard</h2>
+                <p>The crown jewel of our intelligence suite. A multi-layered engine that syncs Volume Orderbook, Smart
+                    Order Blocks, and Zero-Lag Momentum in one interactive dashboard.</p>
+                <a href="https://infinityalgoacademy.net/item/ultimate-volumetric-price-action-dashboard-smart-order-blocks-trend-pulse-order-flow/"
+                    class="cta-btn">ACCESS THE DASHBOARD</a>
             </div>
 
-            <h2>02. Zero-Lag Trend Mathematics</h2>
-            <div class="tech-card">
-                <h3>The John Ehlers Approach</h3>
-                <p>Retail moving averages lag because they weight all data points linearly or exponentially. Our
-                    <strong>Trend Strength Gauge</strong> uses the <strong>ZLEMA (Zero Lag EMA)</strong> logic. By
-                    subtracting the price from n-periods ago from the current price before smoothing, we neutralize the
-                    time-domain delay.</p>
-                <div class="code-block">
-                    <code style="color: #d1d5db;">
-                        <span style="color: #8b949e;">// Recursive Lag Neutralization</span><br>
-                        lag = (length - 1) / 2<br>
-                        data = close + (close - close[lag])<br>
-                        zlema = <span style="color: #d2a8ff;">ta.ema</span>(data, length)
-                    </code>
-                </div>
-                <p>This results in a <strong>Teal/Gold pulse</strong> that reacts to trend changes 3-7 bars faster than
-                    any standard RSI or MACD.</p>
+            <!-- Product 2 -->
+            <div class="article-section">
+                <h2>02. ASK $: The All-in-One Toolkit</h2>
+                <p>The ultimate utilitarian framework for versatile traders. Combines over 20 institutional metrics into
+                    a simplified, high-performance UI for precise entries.</p>
+                <a href="https://infinityalgoacademy.net/item/ask-the-all-in-one-trading-toolkit/" class="cta-btn">GET
+                    THE TOOLKIT</a>
             </div>
 
-            <h2>03. The Orderbook & POC Ladder</h2>
-            <div class="tech-card">
-                <h3>High Volume Nodes (HVN)</h3>
-                <p>The ladder on your right is a <strong>Dynamic Volume Profile</strong>. It calculates the <strong>POC
-                        (Point of Control)</strong>—the price level where the maximum volume has passed. Institutional
-                    algorithms 'park' the price at HVNs to accumulate or distribute without causing drastic slippage.
-                </p>
+            <!-- Product 3 -->
+            <div class="article-section">
+                <h2>03. MM ALGO PREMIUM</h2>
+                <p>Driven by the Smart Money Concept (SMC) core, this algorithm maps institutional accumulation and
+                    distribution zones with surgical precision.</p>
+                <a href="https://infinityalgoacademy.net/item/mm-algo-premium-smart-money-trading-system-for-tradingview/"
+                    class="cta-btn">ACTIVATE SMC LOGIC</a>
             </div>
 
-            <h2>04. Technical Q&A</h2>
-            <div class="qa-grid">
-                <div class="qa-item">
-                    <span class="q">Why do zones disappear?</span>
-                    <span class="a">This is 'Liquidity Absorption'. When a candle closes beyond an OB center-line
-                        (Equilibrium), the orders are filled (Mitigated), and the zone is no longer a valid
-                        institutional magnet.</span>
-                </div>
-                <div class="qa-item">
-                    <span class="q">What is the "Volumetric Delta"?</span>
-                    <span class="a">Delta is the difference between aggressive buyers and sellers. Our dashboard
-                        calculates this inside the OB to tell you if the 'Institutional Big Fish' are leaning Buy or
-                        Sell.</span>
-                </div>
+            <!-- Product 4 -->
+            <div class="article-section">
+                <h2>04. Volume Spectrum Grid</h2>
+                <p>The most advanced liquidity mapping engine on TradingView. It visualizes volume intensity across the
+                    entire price spectrum, revealing hidden institutional interest nodes.</p>
+                <a href="https://infinityalgoacademy.net/item/volume-spectrum-grid-liquidity-mapping-engine/"
+                    class="cta-btn">MAP THE LIQUIDITY</a>
             </div>
+
+            <!-- Product 5 -->
+            <div class="article-section">
+                <h2>05. AI Signals Remastered</h2>
+                <p>Combines machine learning and volumetric data to generate predictive signals focused on institutional
+                    buy/sell pressure points.</p>
+                <a href="https://infinityalgoacademy.net/item/ai-signals-remastered/" class="cta-btn">SYNC AI
+                    INTELLIGENCE</a>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="article-section">
+                <h2>06. 80+ Pro Indicators Bundle</h2>
+                <p>Own the entire analytical history of TradingView. A massive bundle of professional-grade indicators
+                    covering every trading style from Scalping to Positional.</p>
+                <a href="https://infinityalgoacademy.net/item/80-pro-tradingview-indicators-bundle-trade-smarter-with-one-powerful-system/"
+                    class="cta-btn">GET THE FULL BUNDLE</a>
+            </div>
+
+            <!-- Product 7 -->
+            <div class="article-section">
+                <h2>07. Alpha Hunter System</h2>
+                <p>A multi-timeframe (MTF) monster paired with a strict risk management engine. Designed for hunters who
+                    look for high-probability institutional rotations.</p>
+                <a href="https://infinityalgoacademy.net/item/alpha-hunter-system-mtf-risk-manager-full-explanation/"
+                    class="cta-btn">HUNT THE ALPHA</a>
+            </div>
+
+            <!-- Product 8 -->
+            <div class="article-section">
+                <h2>08. HonoAlgo TradingView</h2>
+                <p>Our contribution to the open-source community. A foundational PineScript logic that offers clarity in
+                    volatile market structures.</p>
+                <a href="https://infinityalgoacademy.net/item/honoalgo-tradingview-pinescript-free-download/"
+                    class="cta-btn">DOWNLOAD FREE</a>
+            </div>
+
+            <!-- Product 9 -->
+            <div class="article-section">
+                <h2>09. Gains Algo Alpha V2</h2>
+                <p>A high-frequency alpha engine refined for TradingView users who demand speed and volumetric
+                    confirmation on every tick.</p>
+                <a href="https://infinityalgoacademy.net/item/gains-algo-alpha-v2-download-free-tradingview-pinescript/"
+                    class="cta-btn">GET ALPHA ACCESS</a>
+            </div>
+
         </div>
 
-        <!-- ARABIC PANE -->
         <div id="pane-ar" class="pane">
-            <div class="pane-label">النواة المؤسساتية: الإصدار 4.0.0 (AR)</div>
+            <div class="pane-label">كتالوج النخبة: العالمي (AR)</div>
+            <h1>أسطول التداول المؤسساتي</h1>
+            <p>استكشف مجموعتنا الفاخرة من أدوات TradingView المصممة لكشف سيولة السوق وتدفق الأوامر المؤسساتي.</p>
 
-            <h1>السيولة الذكية وذكاء<br>تدفق الأوامر الرقمي</h1>
-            <p>مرحباً بك في عصر الدقة الخوارزمية. هذا التوثيق ليس مجرد دليل؛ إنه غوص عميق في هيكلة السوق المجهرية. نحن
-                نعتمد على <strong>معالجة الإشارات الرقمية (DSP)</strong> وتحليل <strong>بروفايل الحجم</strong> لكشف
-                نوايا المؤسسات الكبرى قبل تنفيذ صفقتها النهائية.</p>
-
-            <h2>01. مناطق السيولة الحجمية (VOB)</h2>
-            <div class="tech-card">
-                <h3>نظرية التخفيف (Mitigation)</h3>
-                <p>منطقة الـ Order Block ليست مجرد 'عرض أو طلب'. إنها مجموعة من <strong>أوامر مؤسساتية معلقة لم تنفذ
-                        بالكامل</strong>. عندما يعود السعر لهذه المناطق، تقوم المؤسسات بـ 'تخفيف' مخاطرها. تكتشف
-                    خوارزميتنا هذه المناطق عن طريق تحديد <strong>انفجارات الحجم</strong> المقترنة مع <strong>كسر هيكلية
-                        السوق (MSB)</strong>.</p>
-                <div class="code-block" style="direction: ltr;">
-                    <code style="color: #d1d5db;">
-                        <span style="color: #ff7b72;">method</span> <span style="color: #d2a8ff;">isValidOB</span>(float pivot_v, float v_thresh) =><br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;pivot_v > v_thresh <span style="color: #ff7b72;">and</span> <span style="color: #d2a8ff;">ta.change</span>(msb) != 0
-                    </code>
-                </div>
-                <p>هذا الكود يضمن أننا نرسم فقط المناطق التي كانت فيها المؤسسات الكبيرة نشطة حقاً، مما يصفي 90% من
-                    المناطق الوهمية التي يقع فيها تجار التجزئة.</p>
+            <!-- المنتج 1 -->
+            <div class="article-section">
+                <h2>01. منصة السلوك السعري الحجمي</h2>
+                <p>جوهرة أدواتنا الاستخباراتية. محرك متعدد الطبقات يدمج دفتر الأوامر، مناطق السيولة الذكية، والزخم
+                    صفر-تأخير في لوحة تفاعلية واحدة.</p>
+                <a href="https://infinityalgoacademy.net/item/ultimate-volumetric-price-action-dashboard-smart-order-blocks-trend-pulse-order-flow/"
+                    class="cta-btn">افتح لوحة التحكم</a>
             </div>
 
-            <h2>02. الرياضيات خلف الاتجاه صفر-تأخير</h2>
-            <div class="tech-card">
-                <h3>منهجية جون إيلرز (John Ehlers)</h3>
-                <p>المتوسطات المتحركة التقليدية تتأخر لأنها تزن جميع نقاط البيانات زمنياً. مقياسنا لقوة الاتجاه يستخدم
-                    منطق <strong>ZLEMA (المتوسط المرجح صفر-تأخير)</strong>. عن طريق طرح السعر قبل n-فترات من السعر
-                    الحالي قبل التمهيد، نقوم بتحييد التأخير الزمني بالكامل.</p>
-                <div class="code-block" style="direction: ltr;">
-                    <code style="color: #d1d5db;">
-                        <span style="color: #8b949e;">// تحييد التأخير التكراري</span><br>
-                        lag = (length - 1) / 2<br>
-                        data = close + (close - close[lag])<br>
-                        zlema = <span style="color: #d2a8ff;">ta.ema</span>(data, length)
-                    </code>
-                </div>
-                <p>ينتج عن ذلك <strong>نبض أزرق/ذهبي</strong> يتفاعل مع تغير الاتجاه أسرع بـ 3 إلى 7 شموع من أي مؤشر RSI
-                    أو MACD تقليدي.</p>
+            <!-- المنتج 2 -->
+            <div class="article-section">
+                <h2>02. حقيبة أدوات ASK $</h2>
+                <p>الإطار العملي الأمثل للمتداولين المتعددي الاستراتيجيات. يجمع أكثر من 20 مقياساً مؤسساتياً في واجهة
+                    مبسطة وفائقة الأداء.</p>
+                <a href="https://infinityalgoacademy.net/item/ask-the-all-in-one-trading-toolkit/" class="cta-btn">احصل
+                    على الحقيبة</a>
             </div>
 
-            <h2>03. دفتر الأوامر وسلم POC</h2>
-            <div class="tech-card">
-                <h3>عقد الحجم العالية (HVN)</h3>
-                <p>السلم الموجود على يمينك هو <strong>بروفايل الحجم الديناميكي</strong>. يقوم بحساب <strong>نقطة التحكم
-                        (POC)</strong>—وهي مستوى السعر الذي مر من خلاله أقصى حجم تداول. خوارزميات المؤسسات 'تركن' السعر
-                    عند هذه العقد للتجميع أو التصريف بدون حدوث انزلاق سعري حاد.</p>
+            <!-- المنتج 3 -->
+            <div class="article-section">
+                <h2>03. خوارزمية MM ALGO PREMIUM</h2>
+                <p>مدعومة بجوهر مفاهيم الأموال الذكية (SMC)، ترسم هذه الخوارزمية مناطق التجميع والتصريف المؤسساتية بدقة
+                    جراحية.</p>
+                <a href="https://infinityalgoacademy.net/item/mm-algo-premium-smart-money-trading-system-for-tradingview/"
+                    class="cta-btn">فعل منطق SMC</a>
             </div>
 
-            <h2>04. أسئلة تقنية شائعة</h2>
-            <div class="qa-grid">
-                <div class="qa-item">
-                    <span class="q">لماذا تختفي المناطق أحياناً؟</span>
-                    <span class="a">هذا ما يسمى بـ 'امتصاص السيولة'. عندما تغلق شمعة وراء خط منتصف الـ OB (خط التوازن)،
-                        فهذا يعني أن الأوامر قد تم تنفيذها (Mitigated)، ولم تعد المنطقة مغناطيساً مؤسساتياً
-                        صالحاً.</span>
-                </div>
-                <div class="qa-item">
-                    <span class="q">ما هو "الدلتا الحجمي"؟</span>
-                    <span class="a">الدلتا هو الفرق بين المشترين والبائعين العدوانيين. تقوم لوحة التحكم بحساب هذا داخل
-                        الـ OB لتخبارك ما إذا كان 'هوامير المؤسسات' يميلون للشراء أم للبيع.</span>
-                </div>
+            <!-- المنتج 4 -->
+            <div class="article-section">
+                <h2>04. شبكة طيف الحجم (Volume Spectrum)</h2>
+                <p>محرك رسم السيولة المتقدم. يقوم بتمثيل شدة الحجم عبر كامل نطاق السعر، كاشفاً عن عقد الاهتمام المؤسساتي
+                    المخفية.</p>
+                <a href="https://infinityalgoacademy.net/item/volume-spectrum-grid-liquidity-mapping-engine/"
+                    class="cta-btn">ارسم خريطة السيولة</a>
             </div>
+
+            <!-- المنتج 5 -->
+            <div class="article-section">
+                <h2>05. إشارات الذكاء الاصطناعي (AI Remastered)</h2>
+                <p>تدمج بين التعلم الآلي والبيانات الحجمية لتوليد إشارات تنبؤية تركز على نقاط ضغط الشراء والبيع
+                    المؤسساتي.</p>
+                <a href="https://infinityalgoacademy.net/item/ai-signals-remastered/" class="cta-btn">زامن الذكاء
+                    الاصطناعي</a>
+            </div>
+
+            <!-- المنتج 6 -->
+            <div class="article-section">
+                <h2>06. باقة الـ 80 مؤشر للمحترفين</h2>
+                <p>تملك التاريخ التحليلي الكامل لـ TradingView. باقة ضخمة من المؤشرات الاحترافية تغطي كل أساليب التداول
+                    من السكالبينج إلى الاستثمار.</p>
+                <a href="https://infinityalgoacademy.net/item/80-pro-tradingview-indicators-bundle-trade-smarter-with-one-powerful-system/"
+                    class="cta-btn">احصل على الباقة الكاملة</a>
+            </div>
+
+            <!-- المنتج 7 -->
+            <div class="article-section">
+                <h2>07. نظام ألفا هنتر (Alpha Hunter)</h2>
+                <p>وحش الفريمات المتعددة (MTF) مقترن بمحرك صارم لإدارة المخاطر. مصمم للصيادين الذين يبحثون عن دورات
+                    السيولة المؤسساتية.</p>
+                <a href="https://infinityalgoacademy.net/item/alpha-hunter-system-mtf-risk-manager-full-explanation/"
+                    class="cta-btn">اصطد الألفا الآن</a>
+            </div>
+
+            <!-- المنتج 8 -->
+            <div class="article-section">
+                <h2>08. مؤشر HonoAlgo المجاني</h2>
+                <p>مساهمتنا للمجتمع مفتوح المصدر. منطق PineScript أساسي يوفر الوضوح في بنية السوق المتقلبة.</p>
+                <a href="https://infinityalgoacademy.net/item/honoalgo-tradingview-pinescript-free-download/"
+                    class="cta-btn">تحميل مجاني</a>
+            </div>
+
+            <!-- المنتج 9 -->
+            <div class="article-section">
+                <h2>09. خوارزمية Gains Algo Alpha V2</h2>
+                <p>محرك ألفا عالي التردد مصمم لمستخدمي TradingView الذين يطلبون السرعة والتأكيد الحجمي عند كل تكة سعرية.
+                </p>
+                <a href="https://infinityalgoacademy.net/item/gains-algo-alpha-v2-download-free-tradingview-pinescript/"
+                    class="cta-btn">احصل على وصول ألفا</a>
+            </div>
+
         </div>
     </div>
 
