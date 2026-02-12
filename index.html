@@ -4,26 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Volumetric Price Action Dashboard | Institutional Grade Analysis</title>
+    <title>Ultimate Volumetric Dashboard | Technical Documentation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@300;400;600;800&family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap"
         rel="stylesheet">
     <style>
         :root {
             --primary-gold: #c5a059;
             --primary-teal: #00bfa5;
-            --bg-dark: #050608;
-            --card-bg: rgba(13, 17, 23, 0.7);
-            --text-white: #f0f1f3;
-            --text-gray: #a1a1aa;
-            --border-color: rgba(197, 160, 89, 0.2);
-            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --bg-body: #0a0c10;
+            --bg-sidebar: #0f1117;
+            --bg-card: #161a22;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: rgba(197, 160, 89, 0.15);
+            --sidebar-width: 300px;
+            --header-height: 70px;
+            --transition: all 0.3s ease;
         }
 
         [lang="ar"] {
             font-family: 'IBM Plex Sans Arabic', sans-serif;
+            --sidebar-width: 300px;
         }
 
         * {
@@ -34,238 +38,235 @@
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-white);
+            background-color: var(--bg-body);
+            color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            line-height: 1.8;
-            overflow-x: hidden;
-        }
-
-        .bg-animate {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                radial-gradient(circle at 10% 20%, rgba(197, 160, 89, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(0, 191, 165, 0.05) 0%, transparent 50%);
-            z-index: -1;
-            filter: blur(100px);
-        }
-
-        header {
-            padding: 1.2rem 8%;
+            line-height: 1.6;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            background: rgba(5, 6, 8, 0.85);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
+            min-height: 100vh;
         }
 
-        .logo {
+        /* Sidebar Navigation */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        [lang="ar"] .sidebar {
+            left: auto;
+            right: 0;
+            border-right: none;
+            border-left: 1px solid var(--border);
+        }
+
+        .logo-area {
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-text {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: 800;
             background: linear-gradient(135deg, var(--primary-gold), #fff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
         }
 
-        .lang-switch {
-            background: rgba(197, 160, 89, 0.1);
-            border: 1px solid var(--border-color);
-            color: var(--text-white);
-            padding: 0.7rem 1.6rem;
-            border-radius: 14px;
-            cursor: pointer;
+        .nav-group {
+            margin-bottom: 2rem;
+        }
+
+        .nav-label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
             font-weight: 700;
+        }
+
+        .nav-link {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.7rem 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
             transition: var(--transition);
+            margin-bottom: 0.2rem;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-gold);
+            background: rgba(197, 160, 89, 0.05);
+        }
+
+        .nav-link.active {
+            color: #fff;
+            background: rgba(197, 160, 89, 0.15);
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 4rem 10% 8rem;
+            max-width: 1400px;
+            transition: var(--transition);
+        }
+
+        [lang="ar"] .main-content {
+            margin-left: 0;
+            margin-right: var(--sidebar-width);
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: var(--sidebar-width);
+            height: var(--header-height);
+            background: rgba(10, 12, 16, 0.8);
+            backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 0.95rem;
+            justify-content: flex-end;
+            padding: 0 4%;
+            z-index: 90;
+            border-bottom: 1px solid var(--border);
         }
 
-        .lang-switch:hover {
-            border-color: var(--primary-gold);
-            background: rgba(197, 160, 89, 0.2);
-            transform: translateY(-2px);
+        [lang="ar"] header {
+            left: 0;
+            right: var(--sidebar-width);
         }
 
-        main {
-            padding: 140px 8% 80px;
-            max-width: 1300px;
-            margin: 0 auto;
+        .lang-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .hero-section {
-            text-align: center;
-            margin-bottom: 6rem;
-        }
-
-        .hero-image-wrapper {
-            position: relative;
-            border-radius: 40px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
-            margin-bottom: 3rem;
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-image-wrapper img {
-            width: 100%;
-            display: block;
-            transition: transform 1s ease;
-        }
-
-        .hero-image-wrapper:hover img {
-            transform: scale(1.02);
-        }
-
-        .encyclopedia-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(30px);
-            padding: 5rem;
-            border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.4);
+        /* Article Styling */
+        section {
+            padding-top: 80px;
             margin-bottom: 4rem;
         }
 
         h1 {
             font-family: 'Outfit', sans-serif;
-            font-size: 4rem;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, var(--primary-gold), #fff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
         }
 
         h2 {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
-            margin: 4rem 0 2rem;
-            color: var(--primary-teal);
-            border-left: 5px solid var(--primary-gold);
-            padding-left: 25px;
-        }
-
-        [lang="ar"] h2 {
-            border-left: none;
-            border-right: 5px solid var(--primary-gold);
-            padding-left: 0;
-            padding-right: 25px;
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-gold);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
         }
 
         h3 {
-            font-size: 1.8rem;
-            margin: 2.5rem 0 1.2rem;
-            color: var(--primary-gold);
+            font-size: 1.6rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary-teal);
         }
 
         p {
-            font-size: 1.15rem;
-            color: var(--text-gray);
-            margin-bottom: 1.8rem;
-            max-width: 900px;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
         }
 
-        .highlight-box {
-            background: rgba(197, 160, 89, 0.08);
-            border-right: 4px solid var(--primary-gold);
-            padding: 2.5rem;
-            border-radius: 0 20px 20px 0;
-            margin: 3rem 0;
-        }
-
-        [lang="ar"] .highlight-box {
-            border-right: none;
-            border-left: 4px solid var(--primary-gold);
-            border-radius: 20px 0 0 20px;
-        }
-
-        .grid-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 3rem;
-            margin: 4rem 0;
-        }
-
-        .grid-card {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 3rem;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: var(--transition);
-        }
-
-        .grid-card:hover {
-            background: rgba(197, 160, 89, 0.05);
-            border-color: var(--primary-gold);
-            transform: translateY(-10px);
-        }
-
-        .code-container {
-            background: #0d1117;
-            padding: 2.5rem;
-            border-radius: 24px;
-            font-family: 'Fira Code', monospace;
+        .code-block {
+            background: #010409;
             border: 1px solid #30363d;
-            margin: 3rem 0;
-            color: #d1d5db;
-            font-size: 1rem;
-            line-height: 1.6;
-            overflow-x: auto;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-family: 'Fira Code', monospace;
+            position: relative;
         }
 
-        .code-title {
-            color: var(--primary-gold);
-            font-weight: 700;
-            margin-bottom: 1rem;
-            display: block;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
+        .code-header {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #21262d;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.75rem;
+            border-radius: 0 12px 0 12px;
+            color: var(--text-muted);
         }
 
-        .cta-footer {
-            text-align: center;
-            padding: 6rem 0;
-            background: radial-gradient(circle at center, rgba(197, 160, 89, 0.1), transparent 70%);
-            border-radius: 50px;
-            margin-top: 4rem;
+        code span.keyword {
+            color: #ff7b72;
         }
 
-        .btn-gold {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary-gold), #e2b76e);
-            color: #000;
-            padding: 1.5rem 5rem;
-            border-radius: 20px;
-            font-weight: 800;
-            text-decoration: none;
-            font-size: 1.5rem;
-            transition: var(--transition);
-            box-shadow: 0 20px 50px rgba(197, 160, 89, 0.3);
+        code span.string {
+            color: #a5d6ff;
         }
 
-        .btn-gold:hover {
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 30px 60px rgba(197, 160, 89, 0.5);
+        code span.comment {
+            color: #8b949e;
         }
 
+        code span.func {
+            color: #d2a8ff;
+        }
+
+        .callout {
+            background: rgba(0, 191, 165, 0.05);
+            border-left: 4px solid var(--primary-teal);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        [lang="ar"] .callout {
+            border-left: none;
+            border-right: 4px solid var(--primary-teal);
+            border-radius: 8px 0 0 8px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        /* Language-specific settings */
         .hidden {
             display: none;
         }
@@ -275,38 +276,73 @@
             text-align: right;
         }
 
-        footer {
-            text-align: center;
-            padding: 6rem 0;
-            color: var(--text-gray);
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-
-        @media (max-width: 900px) {
-            h1 {
-                font-size: 2.8rem;
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 0;
+                padding: 0;
+                overflow: hidden;
             }
 
-            .encyclopedia-card {
-                padding: 2rem;
+            [lang="ar"] .sidebar {
+                transform: translateX(100%);
             }
 
-            h2 {
-                font-size: 1.8rem;
+            .main-content,
+            header {
+                margin: 0;
+                left: 0;
+                right: 0;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="bg-animate"></div>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo-area">
+            <div class="logo-text">INFINITY ALGO</div>
+        </div>
 
+        <div id="nav-en">
+            <div class="nav-group">
+                <span class="nav-label">Documentation</span>
+                <a href="#intro" class="nav-link active">Introduction</a>
+                <a href="#logic" class="nav-link">Core Logic</a>
+                <a href="#ob" class="nav-link">Order Blocks (Deep)</a>
+                <a href="#pulse" class="nav-link">Trend Pulse</a>
+                <a href="#book" class="nav-link">Volume Orderbook</a>
+            </div>
+            <div class="nav-group">
+                <span class="nav-label">Execution</span>
+                <a href="#strategy" class="nav-link">Trading Strategies</a>
+                <a href="#alerts" class="nav-link">Smart Alerts</a>
+            </div>
+        </div>
+
+        <div id="nav-ar" class="hidden">
+            <div class="nav-group">
+                <span class="nav-label">التوثيق التقني</span>
+                <a href="#intro-ar" class="nav-link active">مقدمة</a>
+                <a href="#logic-ar" class="nav-link">المنطق البرمجي</a>
+                <a href="#ob-ar" class="nav-link">مناطق السيولة (OB)</a>
+                <a href="#pulse-ar" class="nav-link">متتبع الاتجاه</a>
+                <a href="#book-ar" class="nav-link">دفتر الأوامر</a>
+            </div>
+            <div class="nav-group">
+                <span class="nav-label">التنفيذ الميداني</span>
+                <a href="#strategy-ar" class="nav-link">استراتيجيات التداول</a>
+                <a href="#alerts-ar" class="nav-link">التنبيهات الذكية</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Header for Shared Controls -->
     <header>
-        <div class="logo">INFINITY ALGO</div>
-        <button class="lang-switch" onclick="switchLang()">
-            <span id="label">العربية</span>
-            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button class="lang-btn" onclick="toggleLang()">
+            <span id="lang-text">العربية</span>
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 11.37 9.188 16.503 6 20">
                 </path>
@@ -314,293 +350,192 @@
         </button>
     </header>
 
-    <main>
-        <!-- Content in English -->
-        <div id="en" class="content-wrapper">
-            <div class="hero-section">
-                <h1>The Volumetric Encyclopedia<br>Mastering Price Action</h1>
-                <p>A comprehensive 10,000+ word depth technical guide to the most advanced institutional trading
-                    dashboard ever created for TradingView.</p>
-                <div class="hero-image-wrapper">
-                    <img src="assets/banner.png" alt="Institutional Trading Console">
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+        <!-- English Section -->
+        <div id="content-en">
+            <section id="intro">
+                <h1>Ultimate Volumetric Dashboard Documentation</h1>
+                <p>Welcome to the official technical documentation for the Ultimate Volumetric Price Action Dashboard.
+                    This guide provides an exhaustive character-by-character analysis of the indicator's logic,
+                    mathematics, and institutional applications.</p>
+                <div class="callout">
+                    This dashboard is built on **Pine Script v5** and features advanced memory management using custom
+                    data types.
                 </div>
-            </div>
+                </article>
 
-            <article class="encyclopedia-card">
-                <h2>Introduction: The Institutional Shift</h2>
-                <p>In the modern financial landscape, retail indicators like RSI and basic EMA are lagging artifacts of
-                    the past. Institutional traders rely on <strong>Liquidity</strong>, <strong>Order Flow</strong>, and
-                    <strong>Volume Concentration</strong>. This guide breaks down the code, logic, and field execution
-                    of the Ultimate Volumetric Dashboard—word by word, line by line.
-                </p>
-
-                <div class="highlight-box">
-                    <h3>The Design Philosophy</h3>
-                    <p>Every pixel on this dashboard is driven by a mathematical certainty. We don't predict price; we
-                        identify where the Big Money has already committed its capital.</p>
-                </div>
-
-                <h2>Chapter 1: Smart Order Blocks (The Engine)</h2>
-                <p>An Order Block (OB) is not just a candle; it's a zone of institutional transaction intensity. Our
-                    algorithm uses a unique <strong>Volume-Weighted Pivot</strong> system to identify these zones.</p>
-
-                <div class="grid-info">
-                    <div class="grid-card">
-                        <h3>Detection Precision</h3>
-                        <p>We use <code>ta.pivothigh()</code> and <code>ta.pivotlow()</code> but with a twist: we apply
-                            them to the <strong>Volume Series</strong>. This ensures a zone only appears if a massive
-                            spike in orders occurred.</p>
-                    </div>
-                    <div class="grid-card">
-                        <h3>Equilibrium Logic</h3>
-                        <p>The code calculates the <code>avg</code> (Mid-Point) of every zone. This is the "Fair Value"
-                            where institutions look to reload their positions.</p>
-                    </div>
-                </div>
-
-                <h3>Deep Code Analysis: Character by Character</h3>
-                <div class="code-container">
-                    <span class="code-title">The Initialization Logic</span>
-                    <code>
-                        indicator("Price Action Volumetric OB & Trend Strength", overlay = true, max_bars_back = 5000)
+                <section id="logic">
+                    <h2>The Core Engine Logic</h2>
+                    <p>The indicator initializes by setting high-performance limits to handle massive historical data
+                        processing.</p>
+                    <div class="code-block">
+                        <div class="code-header">pine</div>
+                        <code>
+                        <span class="keyword">indicator</span>(<span class="string">"Price Action Volumetric OB & Trend"</span>, <span class="keyword">overlay</span> = <span class="keyword">true</span>, <span class="keyword">max_bars_back</span> = <span class="func">5000</span>)
                     </code>
-                    <p style="font-size: 0.9rem; margin-top: 10px; color: #888;">
-                        • <strong>indicator:</strong> The core class that tells TradingView to render a script.<br>
-                        • <strong>overlay=true:</strong> Forces the drawings to be ON the price chart, not in a separate
-                        pane.<br>
-                        • <strong>max_bars_back=5000:</strong> Critical for calculating historical volatility and
-                        liquidity zones over long periods.
-                    </p>
-                </div>
-
-                <div class="code-container">
-                    <span class="code-title">The Liquidity Storage Structure</span>
-                    <code>
-                        type ob<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;float top      // Zone Ceiling<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;float btm      // Zone Floor<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;float avg      // Equilibrium Line<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;color css      // Dynamic CSS Color<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;float vol      // Trapped Liquidity
-                    </code>
-                    <p style="font-size: 0.9rem; margin-top: 10px; color: #888;">
-                        • <strong>type ob:</strong> We define a custom object. This is more efficient than standard
-                        arrays because it groups related data points (Price, Color, Volume) into a single "Institutional
-                        Memory" unit.
-                    </p>
-                </div>
-
-                <h2>Chapter 2: Zero-Lag Momentum Pulse</h2>
-                <p>Lag is the greatest killer of trading performance. To solve this, we implemented a <strong>Zero-Lag
-                        Differentiator</strong>. Instead of waiting for a moving average to turn, we calculate the rate
-                    of change using a recursive WMA subtraction model.</p>
-
-                <h3>The Mathematical Proof</h3>
-                <div class="code-container">
-                    <span class="code-title">Lag Reduction Formula</span>
-                    <code>
-                        pulse = 3 * ta.wma(close, L) - 2 * ta.wma(ta.wma(close, L), L)
-                    </code>
-                </div>
-                <p>This formula amplifies recent price changes while neutralizing the "drag" effect of older data. When
-                    the pulse turns Teal, you are entering the trend at the exact moment of institutional buy-side
-                    confirmation.</p>
-
-                <h2>Chapter 3: The Volumetric Orderbook</h2>
-                <p>On the right side of your chart, the dashboard builds a <strong>Dynamic Orderbook</strong>. It
-                    digitizes the last 1000 bars of volume and distributes them across a price ladder.</p>
-
-                <div class="highlight-box">
-                    <h3>Point of Control (POC)</h3>
-                    <p>The system identifies the "Highest Density Node." This is the price level where the most volume
-                        was traded. It acts as a magnet for future price action.</p>
-                </div>
-
-                <h2>Chapter 4: Institutional Execution Strategies</h2>
-                <p>Knowing the logic is 50% of the battle. The other 50% is the execution.</p>
-                <div class="grid-info">
-                    <div class="grid-card">
-                        <h3>The Rebound Play</h3>
-                        <p>Wait for price to reach a Green OB. Check the Trend Pulse. If both align, enter at the
-                            Mid-Line for a low-risk, high-reward scalp.</p>
                     </div>
-                    <div class="grid-card">
-                        <h3>The Breakout Flip</h3>
-                        <p>When an OB is breached with conviction, it doesn't just disappear. It flips its polarity. Our
-                            indicator alerts you the moment this liquidity rotation happens.</p>
-                    </div>
-                </div>
+                    <p>The <code>max_bars_back</code> setting is crucial; it allows the script to look back up to 5000
+                        candles to verify historical liquidity zones, ensuring your charts are consistent across
+                        timeframes.</p>
+                </section>
 
-                <div class="cta-footer">
-                    <h3>Ready to Trade with the Elite?</h3>
-                    <p>Join thousands of professional traders using Infinity Algo tools today.</p>
-                    <a href="https://infinityalgoacademy.net/item/ultimate-volumetric-price-action-dashboard-smart-order-blocks-trend-pulse-order-flow/"
-                        class="btn-gold">UNLOCK ALL FEATURES</a>
-                </div>
-            </article>
+                <section id="ob">
+                    <h2>Chapter 1: Smart Order Blocks (Institutional Footprints)</h2>
+                    <p>Unlike standard supply/demand zones, our Order Blocks are derived from the same logic
+                        institutional machines use to hide their footprints.</p>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>Volume Weighted Pivots</h3>
+                            <p>We apply pivot detection to the volume series to ensure the zone represents a significant
+                                transaction event.</p>
+                        </div>
+                        <div class="info-card">
+                            <h3>Equilibrium (Avg Line)</h3>
+                            <p>The mid-line is calculated dynamically as the point of maximal balance for institutional
+                                reloading.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="pulse">
+                    <h2>Chapter 2: Zero-Lag Momentum Pulse</h2>
+                    <p>To eliminate the delay found in RSI or EMA, the pulse uses a double-subtraction WMA model.</p>
+                    <div class="code-block">
+                        <div class="code-header">Math Logic</div>
+                        <code>
+                        val = <span class="func">3</span> * ta.wma(close, L) - <span class="func">2</span> * ta.wma(ta.wma(close, L), L)
+                    </code>
+                    </div>
+                    <p>This differential equation minimizes the phase shift, allowing you to see trend rotations 3-5
+                        bars ahead of traditional moving averages.</p>
+                </section>
+
+                <section id="strategy">
+                    <h2>Trading Execution: The Professional Playbook</h2>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>Strategy A: Rebound</h3>
+                            <p>1. Price enters Green OB.<br>2. Pulse confirms Teal color.<br>3. Enter Long at
+                                Equilibrium.</p>
+                        </div>
+                        <div class="info-card">
+                            <h3>Strategy B: Liquidity Flip</h3>
+                            <p>When an OB is mitigated, it signals a rotation in market sentiment. Look for the next POC
+                                level in the Orderbook as a magnet.</p>
+                        </div>
+                    </div>
+                </section>
         </div>
 
-        <!-- Content in Arabic -->
-        <div id="ar" class="content-wrapper hidden" lang="ar">
-            <div class="hero-section">
-                <h1>الموسوعة الشاملة للسيولة الحجمية<br>احتراف حركة السعر المؤسساتية</h1>
-                <p>دليل تقني تعليمي يتجاوز الـ 10,000 كلمة يشرح أدق تفاصيل أقوى لوحة تحكم تداول مؤسساتية تم تصميمها على
-                    TradingView.</p>
-                <div class="hero-image-wrapper">
-                    <img src="assets/banner.png" alt="منصة التداول المؤسساتية">
+        <!-- Arabic Section -->
+        <div id="content-ar" class="hidden" lang="ar">
+            <section id="intro-ar">
+                <h1>التوثيق الفني لمنصة السيولة الحجمية</h1>
+                <p>مرحباً بك في الدليل التقني الرسمي لمؤشر Ultimate Volumetric Dashboard. هذا الدليل يقدم تحليلاً موسعاً
+                    حرفاً بحرف لمنطق المؤشر، العمليات الرياضية، والتطبيقات المؤسساتية.</p>
+                <div class="callout">
+                    هذا المؤشر مبرمج بلغة **Pine Script v5** ويتميز بإدارة متقدمة للذاكرة باستخدام كائنات برمجية مخصصة.
                 </div>
-            </div>
+            </section>
 
-            <article class="encyclopedia-card">
-                <h2>مقدمة: التحول نحو الفكر المؤسساتي</h2>
-                <p>في المشهد المالي الحديث، تعتبر المؤشرات التقليدية مثل RSI و EMA البسيط أدوات متأخرة من الماضي. يعتمد
-                    تجار المؤسسات على <strong>السيولة</strong>، <strong>تدفق الأوامر</strong>، و<strong>تركيز
-                        الأحجام</strong>. هذا الدليل يفكك الكود، المنطق، والتنفيذ الميداني لمؤشر Ultimate Volumetric
-                    Dashboard—حرفاً بحرف، وسطراً بسطر.</p>
-
-                <div class="highlight-box">
-                    <h3>فلسفة التصميم</h3>
-                    <p>كل بكسل في هذه اللوحة مدفوع بيقين رياضي. نحن لا نتوقع السعر؛ نحن نحدد أين قامت الأموال الضخمة
-                        (Big
-                        Money) بتخصيص رأس مالها بالفعل.</p>
+            <section id="logic-ar">
+                <h2>المنطق البرمجي الأساسي</h2>
+                <p>يبدأ المؤشر بتهيئة النظام للتعامل مع معالجة ضخمة للبيانات التاريخية بدقة عالية.</p>
+                <div class="code-block">
+                    <div class="code-header">pine script</div>
+                    <code>
+                        <span class="keyword">indicator</span>(<span class="string">"Price Action Volumetric OB & Trend"</span>, <span class="keyword">overlay</span> = <span class="keyword">true</span>, <span class="keyword">max_bars_back</span> = <span class="func">5000</span>)
+                    </code>
                 </div>
+                <p>إعداد <code>max_bars_back</code> هو مفتاح الدقة؛ حيث يسمح للسكريبت بالرجوع حتى 5000 شمعة للتحقق من
+                    مناطق السيولة التاريخية، مما يضمن ثبات الرسم البياني عند التنقل بين الفريمات.</p>
+            </section>
 
-                <h2>الفصل الأول: مناطق السيولة الذكية (Order Blocks)</h2>
-                <p>منطقة الـ Order Block ليست مجرد شمعة؛ بل هي نطاق من كثافة المعاملات المؤسساتية. تستخدم خوارزميتنا
-                    نظام
-                    <strong>Pivot المرجح بالحجم</strong> الفريد لتحديد هذه المناطق بدقة متناهية.
-                </p>
-
-                <div class="grid-info">
-                    <div class="grid-card">
-                        <h3>دقة الاكتشاف</h3>
-                        <p>نستخدم دالة <code>ta.pivothigh()</code> و <code>ta.pivotlow()</code> ولكن بلمسة خاصة: نطبقها
-                            على <strong>سلسلة أحجام التداول</strong>. هذا يضمن أن المنطقة لن تظهر إلا إذا حدث ارتفاع ضخم
-                            ومفاجئ في الأوامر.</p>
+            <section id="ob-ar">
+                <h2>الفصل الأول: مناطق السيولة الذكية (Smart OB)</h2>
+                <p>على عكس مناطق العرض والطلب العادية، يتم اشتقاق مناطقنا من نفس المنطق الذي تستخدمه خوارزميات البنوك
+                    لإخفاء بصماتها.</p>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>Pivots المرجحة بالحجم</h3>
+                        <p>نطبق اكتشاف نقاط التحول على سلسلة الأحجام لضمان أن المنطقة تمثل حدث تعامل ضخم فعلاً.</p>
                     </div>
-                    <div class="grid-card">
-                        <h3>منطق التوازن (Equilibrium)</h3>
-                        <p>يقوم الكود بحساب <code>avg</code> (نقطة المنتصف) لكل منطقة. هذا هو "السعر العادل" حيث تبحث
-                            المؤسسات عن إعادة تحميل مراكزها السعرية.</p>
+                    <div class="info-card">
+                        <h3>التوازن (خط المتوسط)</h3>
+                        <p>يتم حساب خط المنتصف ديناميكياً كنقطة توازن مثالية تعيد المؤسسات عندها تمركز صفقاتها.</p>
                     </div>
                 </div>
+            </section>
 
-                <h3>تحليل الكود بعمق: حرفاً بحرف</h3>
-                <div class="code-container">
-                    <span class="code-title">منطق التهيئة والتعريف</span>
-                    <code>
-                        indicator("Price Action Volumetric OB & Trend Strength", overlay = true, max_bars_back = 5000)
-                    </code>
-                    <p style="font-size: 0.9rem; margin-top: 10px; color: #888;">
-                        • <strong>indicator:</strong> الفئة الأساسية التي تخبر TradingView بتحويل السكريبت إلى مؤشر
-                        بصري.<br>
-                        • <strong>overlay=true:</strong> تسمح برسم المناطق فوق الشموع مباشرة بدلاً من نافذة منفصلة.<br>
-                        • <strong>max_bars_back=5000:</strong> ضرورية جداً لحساب المستويات التاريخية بدقة وضمان ثبات
-                        المناطق عند العودة للوراء.
-                    </p>
-                </div>
-
-                <div class="code-container">
-                    <span class="code-title">تعريف هيكل الـ OB البرمجي</span>
-                    <code>
-                        type ob<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;float top      // سقف المنطقة<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;float btm      // قاع المنطقة<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;float avg      // خط التوازن<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;color css      // اللون الديناميكي<br>
-                        &nbsp;&nbsp;&nbsp;&nbsp;float vol      // السيولة المحتجزة
-                    </code>
-                    <p style="font-size: 0.9rem; margin-top: 10px; color: #888;">
-                        • <strong>type ob:</strong> قمنا بتعريف كائن مخصص. هذا أكثر كفاءة من المصفوفات العادية لأنه يجمع
-                        كل بيانات المنطقة (سعر، لون، حجم) في "ذاكرة مؤسساتية" واحدة يسهل استدعاؤها وتحليلها.
-                    </p>
-                </div>
-
+            <section id="pulse-ar">
                 <h2>الفصل الثاني: نبض الزخم صفر-تأخير (Zero-Lag)</h2>
-                <p>التأخير (Lag) هو القاتل الأكبر لأداء المتداول. لحل هذه المشكلة، قمنا بتنفيذ <strong>خوارزمية تفاضلية
-                        بدون تأخير</strong>. بدلاً من انتظار تحول المتوسط المتحرك، نحسب معدل التغير باستخدام نموذج طرح
-                    WMA تكراري.</p>
-
-                <h3>الإثبات الرياضي</h3>
-                <div class="code-container">
-                    <span class="code-title">معادلة تقليل التأخير</span>
+                <p>للقضاء على التأخير الموجود في RSI أو EMA، يستخدم النبض نموذج WMA للطرح المزدوج.</p>
+                <div class="code-block">
+                    <div class="code-header">العملية الرياضية</div>
                     <code>
-                        pulse = 3 * ta.wma(close, L) - 2 * ta.wma(ta.wma(close, L), L)
+                        val = <span class="func">3</span> * ta.wma(close, L) - <span class="func">2</span> * ta.wma(ta.wma(close, L), L)
                     </code>
                 </div>
-                <p>هذه المعادلة تضاعف وزن التغيرات السعرية الحديثة مع تحييد تأثير "السحب" للبيانات القديمة. عندما يتحول
-                    النبض إلى اللون "التيل" (Teal)، فأنت تدخل في الاتجاه في نفس لحظة تأكيد الشراء المؤسساتي.</p>
+                <p>هذه المعادلة التفاضلية تقلل من انزياح الطور السعري، مما يسمح لك برؤية دوران الاتجاه قبل المتوسطات
+                    المتحركة التقليدية بـ 3 إلى 5 شموع.</p>
+            </section>
 
-                <h2>الفصل الثالث: دفتر الأوامر الحجمي (Orderbook)</h2>
-                <p>على الجانب الأيمن من الرسم البياني، تقوم لوحة التحكم ببناء <strong>دفتر أوامر ديناميكي</strong>. حيث
-                    تقوم برقمنة آخر 1000 شمعة من الحجم وتوزيعها على "سلم سعري" لتوضيح أين تتركز الصفقات.</p>
-
-                <div class="highlight-box">
-                    <h3>نقطة التحكم (POC)</h3>
-                    <p>يحدد النظام "نقطة الكثافة القصوى". هذا هو مستوى السعر الذي تم تداول أكبر حجم عنده، ويعمل كمغناطيس
-                        لحركة السعر المستقبلية.</p>
-                </div>
-
-                <h2>الفصل الرابع: استراتيجيات التنفيذ المؤسساتية</h2>
-                <p>فهم المنطق هو 50% من المعركة. والـ 50% الأخرى هي التنفيذ الاحترافي.</p>
-                <div class="grid-info">
-                    <div class="grid-card">
+            <section id="strategy-ar">
+                <h2>تنفيذ الصفقات: كتاب قواعد المحترفين</h2>
+                <div class="info-grid">
+                    <div class="info-card">
                         <h3>استراتيجية الارتداد</h3>
-                        <p>انتظر حتى يصل السعر إلى منطقة OB خضراء. تأكد من "نبض الاتجاه". إذا توافق الاثنان، ادخل عند خط
-                            المنتصف لصفقة سكالبينج منخفضة المخاطر وعالية الربح.</p>
+                        <p>1. دخول السعر منطقة OB خضراء.<br>2. تأكيد النبض باللون التيل.<br>3. دخول شراء عند خط التوازن.
+                        </p>
                     </div>
-                    <div class="grid-card">
-                        <h3>استراتيجية الكسر والتدوير</h3>
-                        <p>عند كسر منطقة OB بقوة، فإنها لا تختفي ببساطة، بل تتحول قطبيتها. ينبهك المؤشر في اللحظة التي
-                            يحدث فيها هذا التدوير للسيولة.</p>
+                    <div class="info-card">
+                        <h3>استراتيجية تدوير السيولة</h3>
+                        <p>عندما يتم تخفيف (Mitigation) منطقة سيولة، فهذا يشير إلى دوران في مشاعر السوق. راقب مستوى POC
+                            القادم كمغناطيس للسعر.</p>
                     </div>
                 </div>
-
-                <div class="cta-footer">
-                    <h3>هل أنت مستعد للتداول مع النخبة؟</h3>
-                    <p>انضم إلى آلاف المتداولين المحترفين الذين يستخدمون أدوات Infinity Algo اليوم.</p>
-                    <a href="https://infinityalgoacademy.net/item/ultimate-volumetric-price-action-dashboard-smart-order-blocks-trend-pulse-order-flow/"
-                        class="btn-gold">احصل على النسخة الكاملة الآن</a>
-                </div>
-            </article>
+            </section>
         </div>
-    </main>
 
-    <footer>
-        <p>© 2026 Infinity Algo Academy. Master the Institutional Flow. Developed with ❤️ for professional traders.</p>
-    </footer>
+    </main>
 
     <script>
         let cur = 'en';
-        function switchLang() {
-            const e = document.getElementById('en'), a = document.getElementById('ar'), l = document.getElementById('label');
-            const main = document.querySelector('main');
+
+        function toggleLang() {
+            const enContent = document.getElementById('content-en');
+            const arContent = document.getElementById('content-ar');
+            const navEn = document.getElementById('nav-en');
+            const navAr = document.getElementById('nav-ar');
+            const langText = document.getElementById('lang-text');
 
             if (cur === 'en') {
-                e.classList.add('hidden');
-                a.classList.remove('hidden');
-                l.innerText = 'English';
+                enContent.classList.add('hidden');
+                arContent.classList.remove('hidden');
+                navEn.classList.add('hidden');
+                navAr.classList.remove('hidden');
+                langText.innerText = 'English';
                 document.body.setAttribute('lang', 'ar');
                 cur = 'ar';
             } else {
-                a.classList.add('hidden');
-                e.classList.remove('hidden');
-                l.innerText = 'العربية';
+                arContent.classList.add('hidden');
+                enContent.classList.remove('hidden');
+                navAr.classList.add('hidden');
+                navEn.classList.remove('hidden');
+                langText.innerText = 'العربية';
                 document.body.setAttribute('lang', 'en');
                 cur = 'en';
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Add subtle animation on scroll
-        window.addEventListener('scroll', () => {
-            const cards = document.querySelectorAll('.encyclopedia-card, .grid-card');
-            cards.forEach(card => {
-                const rect = card.getBoundingClientRect();
-                if (rect.top < window.innerHeight - 100) {
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }
+        // Sidebar link highlighting
+        const links = document.querySelectorAll('.nav-link');
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                links.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
             });
         });
     </script>
